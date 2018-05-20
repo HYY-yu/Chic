@@ -1,0 +1,21 @@
+name: flutter_app_demo
+description: A new Flutter application.
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^0.1.0
+  image: "^1.1.32"
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: Segoepr
+      fonts:
+        - asset: assets/fonts/Segoepr.ttf
+        - asset: assets/fonts/Segoepr-Bold.ttf
