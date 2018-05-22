@@ -8,8 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_demo/util/display.dart';
 import 'package:flutter_app_demo/widget/blur.dart';
 import 'package:flutter_app_demo/widget/smallball.dart';
+import 'package:flutter_app_demo/util/time_test.dart';
 import 'package:image/image.dart' as gimage;
-
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);
@@ -30,19 +30,25 @@ class HomePageState extends State<HomePage> {
   Future<Uint8List> _capturePngAndGaussianBlur() async {
     RenderRepaintBoundary boundary =
         globalKey.currentContext.findRenderObject();
-    ui.Image image = await boundary.toImage();
+    // 先缩放，取原图的0.5倍大小图片，减少模糊时间
+    startReport();
+    ui.Image image = await boundary.toImage(pixelRatio: 0.5);
+    //转成rawRgba
     var pixelsData = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
     var pixels = pixelsData.buffer.asUint8List();
-    var width = image.width;
-    var height = image.height;
-    gimage.Image im = gimage.Image.fromBytes(width, height, pixels);
-    // 缩放图片
-    var newW = (width * 0.5).toInt();
-    var newH = (newW * (height / width)).toInt();
-    gimage.Image smallIm = gimage.copyResize(im, newW, newH, gimage.NEAREST);
-    processImageDataRGBA(
-        smallIm.getBytes(), 0, 0, smallIm.width, smallIm.height, 4);
-    var jpgList = gimage.encodeJpg(smallIm, quality: 80);
+    printDuration();
+
+    //使用新算法进行模糊
+    startReport();
+    processImageDataRGBA(pixels, 0, 0, image.width, image.height, 4);
+    printDuration();
+
+    //把pixels转回Image
+    startReport();
+    gimage.Image newImage =
+        new gimage.Image.fromBytes(image.width, image.height, pixels);
+    List<int> jpgList = gimage.encodePng(newImage);
+    printDuration();
     return jpgList;
   }
 
@@ -65,19 +71,19 @@ class HomePageState extends State<HomePage> {
       setState(() {
         eachDayTip = "计算中....";
       });
-      _capturePngAndGaussianBlur().then((Uint8List picBytes) {
-        Image imageWidget = new Image.memory(
-          picBytes,
-          fit: BoxFit.fill,
+      _capturePngAndGaussianBlur().then((Uint8List imageBytes) {
+        Image image = new Image.memory(
+          imageBytes,
           width: screenWidth,
           height: screenHeight,
+          fit: BoxFit.fill,
         );
         setSecondPage(
           new GestureDetector(
             onTap: () {
               setFirstPage();
             },
-            child: imageWidget,
+            child: image,
           ),
         );
       });

@@ -11,11 +11,10 @@ class BallView extends MultiChildLayoutDelegate {
   void performLayout(Size size) {
     for (int i = 0; i < childLength; i++) {
       if (hasChild(i)) {
-
         //完全由子View自己控制大小，不做任何限制
         var childSize = layoutChild(i, new BoxConstraints());
 
-        //定位 - 随机位置（生成避让动画）
+        //定位 - 随机位置
         Offset position = getRandomPositionBySize(size, 50);
         positionChild(i, position);
       }
