@@ -1,4 +1,4 @@
-# flutter_app_demo
+# Chic
 
 A new Flutter application.
 
