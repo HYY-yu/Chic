@@ -5,6 +5,26 @@ import 'package:flutter_app_demo/util/display.dart';
 import 'package:flutter_app_demo/util/monerary.dart';
 import 'package:meta/meta.dart';
 
+/// 圆形的球
+/// 抽取界面的白色圆球部分的代码构成此Widget
+/// 
+/// 关键参数：
+/// amount 金额
+/// monetaryUnitFlag 货币名称
+/// 
+
+class SmallBall extends StatefulWidget {
+  final double amount;
+  final Monerary monetaryUnitFlag;
+
+  const SmallBall(
+      {Key key, @required this.amount, this.monetaryUnitFlag: Monerary.RMB})
+      : super(key: key);
+
+  @override
+  _SmallBallState createState() => new _SmallBallState();
+}
+
 class _SmallBallState extends State<SmallBall> {
   double radius;
   double fontSize;
@@ -73,16 +93,4 @@ class _SmallBallState extends State<SmallBall> {
       ),
     );
   }
-}
-
-class SmallBall extends StatefulWidget {
-  final double amount;
-  final Monerary monetaryUnitFlag;
-
-  const SmallBall(
-      {Key key, @required this.amount, this.monetaryUnitFlag: Monerary.RMB})
-      : super(key: key);
-
-  @override
-  _SmallBallState createState() => new _SmallBallState();
 }

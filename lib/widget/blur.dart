@@ -3,6 +3,14 @@ import 'dart:ui' as ui;
 import 'dart:typed_data';
 import 'package:image/image.dart' as gimage;
 
+/// StackBlur 算法的Dart实现
+/// 
+/// 本项目中未使用到此算法，直接利用Flutter框架提供的高斯模糊接口实现。
+/// 此算法依然保留在此处供学习使用
+/// 
+/// 如果需要对一张图片实施高斯模糊，此算法依然不失为一种快速方便的模式。
+/// 
+
 var mulTable = [
   512,
   512,
