@@ -6,29 +6,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
 
-Helper dbHelper;
-
-void initDB() async {
-  // Get a location using path_provider
-  Directory documentsDirectory = await getApplicationDocumentsDirectory();
-  String path = join(documentsDirectory.path, "chic.db");
-  // Make sure the directory exists
-  try {
-    await documentsDirectory.create(recursive: true);
-  } catch (_) {}
-
-  dbHelper = new Helper(path);
-}
-
-_onConfigure(Database db) async {
-  // Add support for cascade delete
-  await db.execute("PRAGMA foreign_keys = ON");
-}
+Helper dbHelper = new Helper();
 
 class Helper {
-  final String path;
-  Helper(this.path);
-
   Database _db;
   final _lock = new Lock();
 
@@ -37,10 +17,45 @@ class Helper {
       await _lock.synchronized(() async {
         // Check again once entering the synchronized block
         if (_db == null) {
-          _db = await openDatabase(path);
+          // 异步流，最终得到db对象
+          _initDBPath()
+              .then((String path) => openDatabase(
+                    path,
+                    version: 1,
+                    onCreate: _onCreate,
+                    onConfigure: _onConfigure,
+                  ))
+              .then((Database db) => _db = db)
+              .catchError((e) => print("db creator error :$e"));
         }
       });
     }
     return _db;
   }
+
+  Future<String> _initDBPath() async {
+    // Get a location using path_provider.
+    // And make sure the directory exists, if not, create the directory.
+    try {
+      Directory documentsDirectory = await getApplicationDocumentsDirectory();
+      await documentsDirectory.create(recursive: true);
+      return join(documentsDirectory.path, "chic.db");
+    } catch (e) {
+      print("path for chic.db error :$e");
+    }
+    return null;
+  }
+
+  _onConfigure(Database db) async {
+    // Add support for cascade delete
+    await db.execute("PRAGMA foreign_keys = ON");
+  }
+
+  _onCreate(Database db, int version) async {
+    //await db.execute();
+  }
+}
+
+abstract class SQLModel{
+  String createTableSQL();
 }
