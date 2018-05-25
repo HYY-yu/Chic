@@ -1,7 +1,7 @@
-import 'package:flutter_app_demo/util/display.dart';
-import 'package:flutter_app_demo/widget/smallball.dart';
-import 'package:flutter_app_demo/widget/radius_btn.dart';
-import 'package:flutter_app_demo/util/monerary.dart';
+import 'package:chic/util/display.dart';
+import 'package:chic/widget/smallball.dart';
+import 'package:chic/widget/radius_btn.dart';
+import 'package:chic/util/monerary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;

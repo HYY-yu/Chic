@@ -1,4 +1,4 @@
-package com.feng.flutterappdemo;
+package com.feng.chic;
 
 import android.os.Bundle;
 

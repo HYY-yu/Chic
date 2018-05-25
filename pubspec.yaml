@@ -1,4 +1,4 @@
-name: flutter_app_demo
+name: chic
 description: A new Flutter application.
 
 dependencies:
@@ -7,7 +7,6 @@ dependencies:
   cupertino_icons: ^0.1.0
   sqflite: any
   path_provider: ^0.4.0
-  image: "^1.1.32"
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
-import 'package:flutter_app_demo/util/display.dart';
-import 'package:flutter_app_demo/util/monerary.dart';
+import 'package:chic/util/display.dart';
+import 'package:chic/util/monerary.dart';
 import 'package:meta/meta.dart';
 
 /// 圆形的球
