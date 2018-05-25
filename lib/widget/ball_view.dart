@@ -2,6 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+/// 此Widget会随机的给它内部的子widget分配一个位置
+/// 并且不会限制子Widget的大小
+///
+/// 此Widget在本项目中未被使用
+/// 保留此Widget做学习用
+/// 
+
 class BallView extends MultiChildLayoutDelegate {
   int childLength;
 
