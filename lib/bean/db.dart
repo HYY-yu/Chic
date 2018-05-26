@@ -5,6 +5,10 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:synchronized/synchronized.dart';
+import 'package:chic/bean/currency.dart';
+import 'package:chic/bean/bill.dart';
+import 'package:chic/bean/billtype.dart';
+import 'package:chic/bean/budget.dart';
 
 Helper dbHelper = new Helper();
 
@@ -52,7 +56,10 @@ class Helper {
   }
 
   _onCreate(Database db, int version) async {
-    //await db.execute();
+    await db.execute(Currency().createTableSQL());
+    await db.execute(Bill().createTableSQL());
+    await db.execute(BillType().createTableSQL());
+    await db.execute(Budget().createTableSQL());
   }
 }
 

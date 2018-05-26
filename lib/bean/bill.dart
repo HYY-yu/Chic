@@ -6,7 +6,7 @@ class Bill extends SQLModel {
   String _billID;
   String _budgetID;
   double _billAmount;
-  int _typeID;
+  int _billTypeID;
   int _createDateTime;
 
   @override
@@ -27,13 +27,33 @@ class Bill extends SQLModel {
         ")";
   }
 
+  static String tableName() => "t_bill";
   static String fieldBillID = "bill_id";
   static String fieldBudgetID = "budget_id";
   static String fieldBillAmount = "bill_amount";
   static String fieldBillTypeID = "type_id";
   static String fieldCreateDateTime = "create_datetime";
 
-  String tableName() => "t_bill";
+   Map toMap() {
+    Map map = {
+      fieldBillID: billID,
+      fieldBudgetID: budgetID,
+      fieldBillAmount: billAmount,
+      fieldBillTypeID: billTypeID,
+      fieldCreateDateTime: createDateTime,
+    };
+    return map;
+  }
+
+  Bill();
+
+  Bill.fromMap(Map map) {
+    billID = map[fieldBillID];
+    budgetID = map[fieldBudgetID];
+    billAmount = map[fieldBillAmount];
+    billTypeID = map[fieldBillTypeID];
+    createDateTime = map[fieldCreateDateTime];
+  }
 
   int get createDateTime => _createDateTime;
 
@@ -41,10 +61,10 @@ class Bill extends SQLModel {
     _createDateTime = value;
   }
 
-  int get typeID => _typeID;
+  int get billTypeID => _billTypeID;
 
-  set typeID(int value) {
-    _typeID = value;
+  set billTypeID(int value) {
+    _billTypeID = value;
   }
 
   double get billAmount => _billAmount;

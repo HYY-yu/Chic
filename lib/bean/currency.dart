@@ -1,6 +1,6 @@
 import 'package:chic/bean/db.dart';
 
-class Currency extends SQLModel{
+class Currency extends SQLModel {
   int _currencyID;
   String _currencyName;
   String _currencySymbol;
@@ -23,14 +23,31 @@ class Currency extends SQLModel{
     _currencyName = value;
   }
 
+  Map toMap() {
+    Map map = {
+      fieldCurrencyID: currencyID,
+      fieldCurrencyName: currencyName,
+      fieldCurrencySymbol: currencySymbol,
+    };
+    return map;
+  }
+
+  Currency();
+
+  Currency.fromMap(Map map) {
+    currencyID = map[fieldCurrencyID];
+    currencyName = map[fieldCurrencyName];
+    currencySymbol = map[fieldCurrencySymbol];
+  }
+
   @override
   String createTableSQL() {
     return "CREATE TABLE ${tableName()} ("
-    "$fieldCurrencyID INTEGER(2) NOT NULL,"
-    "$fieldCurrencyName TEXT(5) NOT NULL,"
-    "$fieldCurrencySymbol TEXT(5) NOT NULL,"
-    "PRIMARY KEY ('$fieldCurrencyID')"
-    ")";
+        "$fieldCurrencyID INTEGER(2) NOT NULL,"
+        "$fieldCurrencyName TEXT(5) NOT NULL,"
+        "$fieldCurrencySymbol TEXT(5) NOT NULL,"
+        "PRIMARY KEY ('$fieldCurrencyID')"
+        ")";
   }
 
   static String tableName() => "t_currency";

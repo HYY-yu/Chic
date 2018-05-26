@@ -10,6 +10,31 @@ class Budget extends SQLModel {
   double _budgetSurplus;
   double _budgetAccumulated;
 
+   Map toMap() {
+    Map map = {
+      fieldBudgetID: budgetID,
+      fieldBudgetName: budgetName,
+      fieldCurrencyID: currencyID,
+      fieldStartDateTime: startDateTime,
+      fieldBudgetTotal: budgetTotal,
+      fieldBudgetSurplus: budgetSurplus,
+      fieldBudgetAccumulated: budgetAccumulated,
+    };
+    return map;
+  }
+
+  Budget();
+
+  Budget.fromMap(Map map) {
+    budgetID = map[fieldBudgetID];
+    budgetName = map[fieldBudgetName];
+    currencyID = map[fieldCurrencyID];
+    startDateTime = map[fieldStartDateTime];
+    budgetTotal = map[fieldBudgetTotal];
+    budgetSurplus = map[fieldBudgetSurplus];
+    budgetAccumulated = map[fieldBudgetAccumulated];
+  }
+
   @override
   String createTableSQL() {
     return "CREATE TABLE $tableName() ("
@@ -19,7 +44,7 @@ class Budget extends SQLModel {
         "$fieldStartDateTime INTEGER(20) NOT NULL,"
         "$fieldBudgetTotal REAL(10,2) NOT NULL, "
         "$fieldBudgetSurplus REAL(10,2) NOT NULL, "
-        "$fieldAccumulated INTEGER(1) NOT NULL, "
+        "$fieldBudgetAccumulated INTEGER(1) NOT NULL, "
         "PRIMARY KEY ('budget_id') ,"
         "CONSTRAINT 'fk_budget_currency' FOREIGN KEY ($fieldCurrencyID) REFERENCES"
         " ${Currency.tableName()} (${Currency.fieldCurrencyID})"
@@ -34,7 +59,7 @@ class Budget extends SQLModel {
   static String fieldStartDateTime = "start_datetime";
   static String fieldBudgetTotal = "budget_total";
   static String fieldBudgetSurplus = "budget_surplus";
-  static String fieldAccumulated = "budget_accumulated";
+  static String fieldBudgetAccumulated = "budget_accumulated";
 
   double get budgetAccumulated => _budgetAccumulated;
 

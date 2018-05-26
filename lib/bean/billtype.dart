@@ -23,6 +23,25 @@ class BillType extends SQLModel {
   static String fieldTypeIcon = "type_icon";
   static String fieldTypeFlag = "type_flag";
 
+  Map toMap() {
+    Map map = {
+      fieldTypeID: typeID,
+      fieldTypeName: typeName,
+      fieldTypeIcon: typeIcon,
+      fieldTypeFlag: typeFlag,
+    };
+    return map;
+  }
+
+  BillType();
+
+  BillType.fromMap(Map map) {
+    typeID = map[fieldTypeID];
+    typeName = map[fieldTypeName];
+    typeIcon = map[fieldTypeIcon];
+    typeFlag = map[fieldTypeFlag];
+  }
+
   int get typeID => _typeID;
 
   set typeID(int value) {
