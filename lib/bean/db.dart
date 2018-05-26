@@ -22,15 +22,19 @@ class Helper {
         // Check again once entering the synchronized block
         if (_db == null) {
           // 异步流，最终得到db对象
-          _initDBPath()
-              .then((String path) => openDatabase(
-                    path,
-                    version: 1,
-                    onCreate: _onCreate,
-                    onConfigure: _onConfigure,
-                  ))
-              .then((Database db) => _db = db)
-              .catchError((e) => print("db creator error :$e"));
+          try {
+            String path = await _initDBPath();
+            // 删除
+            await deleteDatabase(path);
+            _db = await openDatabase(
+              path,
+              version: 1,
+              onCreate: _onCreate,
+              onConfigure: _onConfigure,
+            );
+          } on Exception catch (e) {
+            print("db creator error :$e");
+          }
         }
       });
     }
@@ -60,9 +64,10 @@ class Helper {
     await db.execute(Bill().createTableSQL());
     await db.execute(BillType().createTableSQL());
     await db.execute(Budget().createTableSQL());
+    await Currency.initCurrencyTable(db);
   }
 }
 
-abstract class SQLModel{
+abstract class SQLModel {
   String createTableSQL();
 }

@@ -8,7 +8,7 @@ class BillType extends SQLModel {
 
   @override
   String createTableSQL() {
-    return "CREATE TABLE $tableName() ("
+    return "CREATE TABLE $tableName ("
         "$fieldTypeID INTEGER(8) NOT NULL,"
         "$fieldTypeName TEXT(6) NOT NULL,"
         "$fieldTypeIcon TEXT(100) NOT NULL,"
@@ -17,7 +17,7 @@ class BillType extends SQLModel {
         ")";
   }
 
-  static String tableName() => "t_bill_type";
+  static String tableName = "t_bill_type";
   static String fieldTypeID = "type_id";
   static String fieldTypeName = "type_name";
   static String fieldTypeIcon = "type_icon";

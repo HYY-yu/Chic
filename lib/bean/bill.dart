@@ -11,7 +11,7 @@ class Bill extends SQLModel {
 
   @override
   String createTableSQL() {
-    return "CREATE TABLE $tableName() ("
+    return "CREATE TABLE $tableName ("
         "$fieldBillID INTEGER NOT NULL,"
         "$fieldBudgetID INTEGER(8) NOT NULL,"
         "$fieldBillAmount REAL(10,2) NOT NULL,"
@@ -19,15 +19,15 @@ class Bill extends SQLModel {
         "$fieldCreateDateTime INTEGER(20) NOT NULL,"
         "PRIMARY KEY ($fieldBillID) ,"
         "CONSTRAINT 'fk_bill_budget' FOREIGN KEY ($fieldBudgetID) "
-        "REFERENCES ${Budget.tableName()} (${Budget.fieldBudgetID}) "
+        "REFERENCES ${Budget.tableName} (${Budget.fieldBudgetID}) "
         "ON DELETE RESTRICT ON UPDATE CASCADE,"
         "CONSTRAINT 'fk_bill_type' FOREIGN KEY ($fieldBillTypeID) "
-        "REFERENCES ${BillType.tableName()} (${BillType.fieldTypeID}) "
+        "REFERENCES ${BillType.tableName} (${BillType.fieldTypeID}) "
         "ON DELETE RESTRICT ON UPDATE CASCADE"
         ")";
   }
 
-  static String tableName() => "t_bill";
+  static String tableName = "t_bill";
   static String fieldBillID = "bill_id";
   static String fieldBudgetID = "budget_id";
   static String fieldBillAmount = "bill_amount";

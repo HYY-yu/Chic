@@ -10,7 +10,7 @@ class Budget extends SQLModel {
   double _budgetSurplus;
   double _budgetAccumulated;
 
-   Map toMap() {
+  Map toMap() {
     Map map = {
       fieldBudgetID: budgetID,
       fieldBudgetName: budgetName,
@@ -37,7 +37,7 @@ class Budget extends SQLModel {
 
   @override
   String createTableSQL() {
-    return "CREATE TABLE $tableName() ("
+    return "CREATE TABLE $tableName ("
         "$fieldBudgetID INTEGER(8) NOT NULL, "
         "$fieldBudgetName TEXT(6) NOT NULL,"
         "$fieldCurrencyID INTEGER(2) NOT NULL,"
@@ -47,12 +47,12 @@ class Budget extends SQLModel {
         "$fieldBudgetAccumulated INTEGER(1) NOT NULL, "
         "PRIMARY KEY ('budget_id') ,"
         "CONSTRAINT 'fk_budget_currency' FOREIGN KEY ($fieldCurrencyID) REFERENCES"
-        " ${Currency.tableName()} (${Currency.fieldCurrencyID})"
+        " ${Currency.tableName} (${Currency.fieldCurrencyID})"
         " ON DELETE RESTRICT ON UPDATE CASCADE"
         ")";
   }
 
-  static String tableName() => "t_budget";
+  static String tableName = "t_budget";
   static String fieldBudgetID = "budget_id";
   static String fieldBudgetName = "budget_name";
   static String fieldCurrencyID = "currency_id";
