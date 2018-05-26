@@ -1,6 +1,7 @@
 import 'package:chic/bean/db.dart';
 
 class BillType extends SQLModel {
+  // 1001 - 1999 系统定义  2000 - 2999 用户自定义
   int _typeID;
   String _typeName;
   String _typeIcon;
