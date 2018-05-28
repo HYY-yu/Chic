@@ -240,32 +240,37 @@ class _HomePageState extends State<HomePage>
   }
 }
 
+void _navigateToBudgetListPage() {}
+
 class HomeBottomBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
         child: Stack(children: <Widget>[
       Align(
-          alignment: AlignmentDirectional.bottomStart,
-          child: translucentCircleBtn(Icon(
-            Icons.library_books,
-            color: Colors.white,
-          ))),
+        alignment: AlignmentDirectional.bottomStart,
+        child: translucentCircleBtn(Icon(
+          Icons.library_books,
+          color: Colors.white,
+        )),
+      ),
       Align(
-          alignment: AlignmentDirectional.bottomEnd,
+        alignment: AlignmentDirectional.bottomEnd,
+        child: GestureDetector(
           child: translucentCircleBtn(Icon(
             Icons.list,
             color: Colors.white,
-          ))),
+          )),
+        ),
+      ),
     ]));
   }
 
   Widget translucentCircleBtn(Widget icon) {
     return Padding(
       padding: EdgeInsets.all(18.0),
-      child: Container(
-        decoration: BoxDecoration(
-            shape: BoxShape.circle, color: const Color(0x33000000)),
+      child: Material(
+        
         child: Padding(
           padding: EdgeInsets.all(12.0),
           child: icon,
