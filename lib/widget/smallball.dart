@@ -1,23 +1,22 @@
+import 'package:chic/bean/currency.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chic/util/display.dart';
-import 'package:chic/util/monerary.dart';
 import 'package:meta/meta.dart';
 
 /// 圆形的球
 /// 抽取界面的白色圆球部分的代码构成此Widget
-/// 
+///
 /// 关键参数：
 /// amount 金额
 /// monetaryUnitFlag 货币名称
-/// 
+///
 
 class SmallBall extends StatefulWidget {
   final double amount;
-  final Monerary monetaryUnitFlag;
+  final int currencyID;
 
-  const SmallBall(
-      {Key key, @required this.amount, this.monetaryUnitFlag: Monerary.RMB})
+  const SmallBall({Key key, @required this.amount, @required this.currencyID})
       : super(key: key);
 
   @override
@@ -27,22 +26,26 @@ class SmallBall extends StatefulWidget {
 class _SmallBallState extends State<SmallBall> {
   double radius;
   double fontSize;
-  double realAmount;
+  String monetaryFlag = "";
 
   @override
   void initState() {
     super.initState();
-    //保留两位小数。
-    realAmount = double.parse(widget.amount.toStringAsFixed(2));
     //计算radius
     radius = screenWidth * (3 / 4);
     //字体大小
     fontSize = radius / 8;
   }
 
+  void loadCurrency() async {
+    monetaryFlag = await Currency.getCurrencyNameByID(widget.currencyID);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    var monetaryFlag = getMonetaryDisplayString(widget.monetaryUnitFlag);
+    var realAmount = double.parse(widget.amount.toStringAsFixed(2));
+    loadCurrency();
     return new Container(
       width: radius,
       height: radius,
@@ -73,14 +76,13 @@ class _SmallBallState extends State<SmallBall> {
                       fontSize: fontSize,
                     )),
                 new TextSpan(
-                  text:"\n本月剩余",
-                  style: new TextStyle(
-                    color: Colors.grey,
-                    fontSize: fontSize * 0.5,
-                  )
-                ),
+                    text: "\n本月剩余",
+                    style: new TextStyle(
+                      color: Colors.grey,
+                      fontSize: fontSize * 0.5,
+                    )),
               ],
-              text: '$monetaryFlag',
+              text: monetaryFlag,
               style: new TextStyle(
                   fontSize: fontSize * 0.6,
                   decoration: TextDecoration.none,

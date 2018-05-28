@@ -1,7 +1,8 @@
+import 'package:chic/bean/budget.dart';
+import 'package:chic/bean/currency.dart';
 import 'package:chic/util/display.dart';
 import 'package:chic/widget/smallball.dart';
 import 'package:chic/widget/radius_btn.dart';
-import 'package:chic/util/monerary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
@@ -19,7 +20,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
-  Monerary monetaryUnitFlag = Monerary.RMB;
+  Budget currentBudget;
+  int surplusDay = 0;
+  String currencyName = "";
+  double surplusAmountToday = 100.0;
 
   AnimationController controller;
   final double MAXSIGMA = 5.0;
@@ -30,9 +34,43 @@ class _HomePageState extends State<HomePage>
   GlobalKey globalKey = new GlobalKey();
   bool _first = true;
 
+  void loadData() async {
+    currentBudget = await Budget.getBudgetByBudgetID("test_budget");
+    var now = DateTime.now();
+    var nowTime = DateTime(now.year, now.month, now.day);
+    var mon = now.month;
+    var yea = now.year;
+    if (mon == 12) {
+      yea += 1;
+      mon = 1;
+    } else {
+      mon += 1;
+    }
+    var nextTime = DateTime(yea, mon, currentBudget.whichDayStart);
+    surplusDay = nextTime.difference(nowTime).inDays;
+
+    currencyName = await Currency.getCurrencyNameByID(currentBudget.currencyID);
+    surplusAmountToday = currentBudget.budgetSurplus / surplusDay;
+
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
+    //Data Load
+    currentBudget = Budget.newBudget(
+      "temp",
+      " ",
+      0,
+      0,
+      1,
+      0.0,
+      0.0,
+      false,
+    );
+    loadData();
+
     sigma = MINSIGMA;
 
     // 初始化动画
@@ -128,7 +166,7 @@ class _HomePageState extends State<HomePage>
                 text: new TextSpan(
                   children: <TextSpan>[
                     new TextSpan(
-                        text: "\n100.0",
+                        text: "\n${surplusAmountToday.toStringAsFixed(2)}",
                         style: new TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Colors.black54,
@@ -141,7 +179,7 @@ class _HomePageState extends State<HomePage>
                           fontSize: 18.0,
                         )),
                   ],
-                  text: '${getMonetaryDisplayString(monetaryUnitFlag)}',
+                  text: currencyName,
                   style: new TextStyle(
                       fontSize: 18.0,
                       decoration: TextDecoration.none,
@@ -163,8 +201,8 @@ class _HomePageState extends State<HomePage>
       textDirection: TextDirection.ltr,
       children: <Widget>[
         SmallBall(
-          amount: 1000.0,
-          monetaryUnitFlag: monetaryUnitFlag,
+          amount: currentBudget.budgetSurplus,
+          currencyID: currentBudget.currencyID,
         ),
         Padding(
           padding: EdgeInsets.only(top: 24.0),
@@ -180,7 +218,7 @@ class _HomePageState extends State<HomePage>
         Padding(
           padding: EdgeInsets.only(top: 8.0),
           child: Text(
-            "29天",
+            "$surplusDay天",
             style: TextStyle(
               fontSize: 26.0,
               color: Colors.white,

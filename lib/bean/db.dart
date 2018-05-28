@@ -65,6 +65,7 @@ class Helper {
     await db.execute(BillType().createTableSQL());
     await db.execute(Budget().createTableSQL());
     await Currency.initCurrencyTable(db);
+    await Budget.initBudgetTable(db);
   }
 }
 

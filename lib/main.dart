@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:chic/widget/home.dart';
 import 'package:chic/bean/db.dart';
-import 'package:sqflite/sqflite.dart';
 
 void main() async {
   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.bottom]);

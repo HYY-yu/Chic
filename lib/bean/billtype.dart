@@ -24,8 +24,8 @@ class BillType extends SQLModel {
   static String fieldTypeIcon = "type_icon";
   static String fieldTypeFlag = "type_flag";
 
-  Map toMap() {
-    Map map = {
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
       fieldTypeID: typeID,
       fieldTypeName: typeName,
       fieldTypeIcon: typeIcon,
@@ -36,7 +36,7 @@ class BillType extends SQLModel {
 
   BillType();
 
-  BillType.fromMap(Map map) {
+  BillType.fromMap(Map<String, dynamic> map) {
     typeID = map[fieldTypeID];
     typeName = map[fieldTypeName];
     typeIcon = map[fieldTypeIcon];

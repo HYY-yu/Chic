@@ -34,8 +34,8 @@ class Bill extends SQLModel {
   static String fieldBillTypeID = "type_id";
   static String fieldCreateDateTime = "create_datetime";
 
-   Map toMap() {
-    Map map = {
+   Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
       fieldBillID: billID,
       fieldBudgetID: budgetID,
       fieldBillAmount: billAmount,
@@ -47,7 +47,7 @@ class Bill extends SQLModel {
 
   Bill();
 
-  Bill.fromMap(Map map) {
+  Bill.fromMap(Map<String, dynamic> map) {
     billID = map[fieldBillID];
     budgetID = map[fieldBudgetID];
     billAmount = map[fieldBillAmount];

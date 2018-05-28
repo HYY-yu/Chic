@@ -46,6 +46,21 @@ class Currency extends SQLModel {
     currencySymbol = map[fieldCurrencySymbol];
   }
 
+  static Future<String> getCurrencyNameByID(int currencyID) async {
+    var db = await dbHelper.getDb();
+
+    var currencyLists = await db.query(
+      tableName,
+      columns: [fieldCurrencyName],
+      where: "$fieldCurrencyID = ?",
+      whereArgs: [currencyID],
+    );
+    if (currencyLists.length > 0) {
+      return currencyLists.first[fieldCurrencyName];
+    }
+    return "";
+  }
+
   static Future<void> initCurrencyTable(Database db) async {
     List<Currency> currencyList = new List();
 
