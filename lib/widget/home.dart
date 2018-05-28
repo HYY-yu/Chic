@@ -248,13 +248,13 @@ class HomeBottomBtn extends StatelessWidget {
       Align(
           alignment: AlignmentDirectional.bottomStart,
           child: translucentCircleBtn(Icon(
-            Icons.assignment,
+            Icons.library_books,
             color: Colors.white,
           ))),
       Align(
           alignment: AlignmentDirectional.bottomEnd,
           child: translucentCircleBtn(Icon(
-            Icons.menu,
+            Icons.list,
             color: Colors.white,
           ))),
     ]));
