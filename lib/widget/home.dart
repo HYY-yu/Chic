@@ -249,18 +249,34 @@ class HomeBottomBtn extends StatelessWidget {
         child: Stack(children: <Widget>[
       Align(
         alignment: AlignmentDirectional.bottomStart,
-        child: translucentCircleBtn(Icon(
-          Icons.library_books,
-          color: Colors.white,
-        )),
+        child: translucentCircleBtn(
+          InkWell(
+            highlightColor: Colors.orange,
+            onTap: _navigateToBudgetListPage,
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Icon(
+                Icons.assignment,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
       ),
       Align(
         alignment: AlignmentDirectional.bottomEnd,
-        child: GestureDetector(
-          child: translucentCircleBtn(Icon(
-            Icons.list,
-            color: Colors.white,
-          )),
+        child: translucentCircleBtn(
+          InkWell(
+            highlightColor: Colors.orange,
+            onTap: _navigateToBudgetListPage,
+            child: Padding(
+              padding: EdgeInsets.all(12.0),
+              child: Icon(
+                Icons.menu,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ),
       ),
     ]));
@@ -270,11 +286,9 @@ class HomeBottomBtn extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(18.0),
       child: Material(
-        
-        child: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: icon,
-        ),
+        color: Colors.black26,
+        borderRadius: new BorderRadius.circular(100.0),
+        child: icon,
       ),
     );
   }
