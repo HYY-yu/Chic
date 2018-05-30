@@ -1,11 +1,14 @@
 import 'package:chic/bean/budget.dart';
 import 'package:chic/bean/currency.dart';
 import 'package:chic/util/display.dart';
+import 'package:chic/widget/budgetlist.dart';
 import 'package:chic/widget/smallball.dart';
 import 'package:chic/widget/radius_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:ui' as ui;
+
+import 'package:flutter/services.dart';
 
 /// 首页
 ///
@@ -240,7 +243,12 @@ class _HomePageState extends State<HomePage>
   }
 }
 
-void _navigateToBudgetListPage() {}
+void _navigateToBudgetListPage(BuildContext context) {
+  Navigator.push(
+    context,
+    new MaterialPageRoute(builder: (context) => new BudgetList()),
+  );
+}
 
 class HomeBottomBtn extends StatelessWidget {
   @override
@@ -252,7 +260,9 @@ class HomeBottomBtn extends StatelessWidget {
         child: translucentCircleBtn(
           InkWell(
             highlightColor: Colors.orange,
-            onTap: _navigateToBudgetListPage,
+            onTap: () {
+              _navigateToBudgetListPage(context);
+            },
             child: Padding(
               padding: EdgeInsets.all(12.0),
               child: Icon(
@@ -268,7 +278,9 @@ class HomeBottomBtn extends StatelessWidget {
         child: translucentCircleBtn(
           InkWell(
             highlightColor: Colors.orange,
-            onTap: _navigateToBudgetListPage,
+            onTap: () {
+              _navigateToBudgetListPage(context);
+            },
             child: Padding(
               padding: EdgeInsets.all(12.0),
               child: Icon(

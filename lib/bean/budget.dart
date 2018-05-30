@@ -79,6 +79,19 @@ class Budget extends SQLModel {
     return null;
   }
 
+  static Future<List<Budget>> getBudgetList() async {
+    var db = await dbHelper.getDb();
+    var budgetListMap = await db.query(tableName);
+
+    var budgetList = new List<Budget>();
+    for (var elem in budgetListMap) {
+      var newElem = Budget.fromMap(elem);
+      budgetList.add(newElem);
+    }
+
+    return budgetList;
+  }
+
   @override
   String createTableSQL() {
     return "CREATE TABLE $tableName ("
