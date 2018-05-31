@@ -6,11 +6,11 @@ import 'package:chic/widget/home.dart';
 import 'package:chic/bean/db.dart';
 
 void main() async {
-   SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
-   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   // InitDB
   await dbHelper.getDb();
-  
+
   runApp(new MaterialApp(
     title: "Chic",
     initialRoute: "/",

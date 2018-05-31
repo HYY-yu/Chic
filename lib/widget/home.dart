@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     initScreen(context);
     return Stack(
       fit: StackFit.expand,
