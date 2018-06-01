@@ -58,9 +58,15 @@ class Budget extends SQLModel {
 
   static Future<void> initBudgetTable(Database db) async {
     var now = DateTime.now();
+
     var budget = Budget.newBudget("test_budget", "我的账本", 1,
         now.millisecondsSinceEpoch, 1, 2000.0, 1980.0, false);
+
+    var budget2 = Budget.newBudget("her_budget", "她的账本", 2,
+        now.millisecondsSinceEpoch, 15, 1000.0, 983.0, false);
+
     await _insert(db, budget);
+    await _insert(db, budget2);
   }
 
   static Future<void> _insert(Database db, Budget elem) async {

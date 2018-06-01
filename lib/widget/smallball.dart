@@ -1,7 +1,6 @@
 import 'package:chic/bean/currency.dart';
-import 'package:flutter/material.dart';
-
 import 'package:chic/util/display.dart';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 
 /// 圆形的球
