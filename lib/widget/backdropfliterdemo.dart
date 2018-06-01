@@ -6,7 +6,8 @@ import 'package:flutter/rendering.dart';
 
 /// 一个BackdropFilter模糊的例子，指出了BackdropFilter不能适配非矩形区域模糊效果的BUG
 /// 
-/// 此文件与Chic无关
+/// 此文件在本项目中未被使用
+/// 保留此文件做学习用
 /// 
 
 /// 运行请取消此注释
