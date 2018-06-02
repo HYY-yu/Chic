@@ -3,8 +3,12 @@ import 'dart:async';
 import 'package:chic/bean/db.dart';
 import 'package:chic/bean/currency.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class Budget extends SQLModel {
+  static String SPBudgetKey = "SPBudgetKey";
+
   String _budgetID;
   String _budgetName;
   int _currencyID;
@@ -58,15 +62,23 @@ class Budget extends SQLModel {
 
   static Future<void> initBudgetTable(Database db) async {
     var now = DateTime.now();
+    var uuid = new Uuid();
 
-    var budget = Budget.newBudget("test_budget", "我的账本", 1,
+    var budget = Budget.newBudget(uuid.v1(), "我的账本", 3,
         now.millisecondsSinceEpoch, 1, 2000.0, 1980.0, false);
 
-    var budget2 = Budget.newBudget("her_budget", "她的账本", 2,
+    var budget2 = Budget.newBudget(uuid.v1(), "她的账本", 2,
         now.millisecondsSinceEpoch, 15, 1000.0, 983.0, false);
+
+    var budget3 = Budget.newBudget(uuid.v1(), "私房钱", 1,
+        now.millisecondsSinceEpoch, 10, 500.0, 182.0, false);
+
+    var pref = await SharedPreferences.getInstance();
+    await pref.setString(SPBudgetKey, budget3._budgetID);
 
     await _insert(db, budget);
     await _insert(db, budget2);
+    await _insert(db, budget3);
   }
 
   static Future<void> _insert(Database db, Budget elem) async {
@@ -83,6 +95,13 @@ class Budget extends SQLModel {
       return Budget.fromMap(budgetList.first);
     }
     return null;
+  }
+
+  static Future<int> deleteBudgetByBudgetID(String budgetID) async {
+    var db = await dbHelper.getDb();
+    var result = await db
+        .delete(tableName, where: "$fieldBudgetID = ?", whereArgs: [budgetID]);
+    return result;
   }
 
   static Future<List<Budget>> getBudgetList() async {

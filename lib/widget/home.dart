@@ -8,6 +8,7 @@ import 'package:chic/widget/radius_btn.dart';
 import 'package:chic/widget/smallball.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// 首页
 ///
@@ -36,18 +37,33 @@ class _HomePageState extends State<HomePage>
   GlobalKey globalKey = new GlobalKey();
   bool _first = true;
 
-  void loadData() async {
-    currentBudget = await Budget.getBudgetByBudgetID("test_budget");
+  void _loadData() async {
+    var pref = await SharedPreferences.getInstance();
+    var selectID = pref.getString(Budget.SPBudgetKey);
+
+    if (selectID == null) {
+      // 跳至新建Budget页面
+    }
+
+    _refreshCurrentBudget(selectID);
+  }
+
+  void _refreshCurrentBudget(String selectID) async {
+    currentBudget = await Budget.getBudgetByBudgetID(selectID);
     var now = DateTime.now();
     var nowTime = DateTime(now.year, now.month, now.day);
     var mon = now.month;
     var yea = now.year;
-    if (mon == 12) {
-      yea += 1;
-      mon = 1;
-    } else {
-      mon += 1;
+    var day = now.day;
+    if (day >= currentBudget.whichDayStart) {
+      if (mon == 12) {
+        yea += 1;
+        mon = 1;
+      } else {
+        mon += 1;
+      }
     }
+
     var nextTime = DateTime(yea, mon, currentBudget.whichDayStart);
     surplusDay = nextTime.difference(nowTime).inDays;
 
@@ -71,7 +87,7 @@ class _HomePageState extends State<HomePage>
       0.0,
       false,
     );
-    loadData();
+    _loadData();
 
     sigma = MINSIGMA;
 
@@ -95,7 +111,7 @@ class _HomePageState extends State<HomePage>
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     initScreen(context);
     return Stack(
       fit: StackFit.expand,
@@ -147,7 +163,7 @@ class _HomePageState extends State<HomePage>
           ),
           Expanded(
             flex: 1,
-            child: HomeBottomBtn(),
+            child: HomeBottomBtn(this),
           )
         ],
       ),
@@ -240,16 +256,22 @@ class _HomePageState extends State<HomePage>
       ],
     );
   }
-}
 
-void _navigateToBudgetListPage(BuildContext context) {
-  Navigator.push(
-    context,
-    new MaterialPageRoute(builder: (context) => new BudgetList()),
-  );
+  void _navigateToBudgetListPage(BuildContext context) async {
+    var result = await Navigator.push(
+      context,
+      new MaterialPageRoute(builder: (context) => new BudgetList()),
+    );
+
+    _loadData();
+  }
 }
 
 class HomeBottomBtn extends StatelessWidget {
+  _HomePageState state;
+
+  HomeBottomBtn(this.state);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -260,7 +282,7 @@ class HomeBottomBtn extends StatelessWidget {
           InkWell(
             highlightColor: Colors.orange,
             onTap: () {
-              _navigateToBudgetListPage(context);
+              state._navigateToBudgetListPage(context);
             },
             child: Padding(
               padding: EdgeInsets.all(12.0),
@@ -278,7 +300,7 @@ class HomeBottomBtn extends StatelessWidget {
           InkWell(
             highlightColor: Colors.orange,
             onTap: () {
-              _navigateToBudgetListPage(context);
+              state._navigateToBudgetListPage(context);
             },
             child: Padding(
               padding: EdgeInsets.all(12.0),

@@ -9,7 +9,6 @@ class _CardItemState extends State<CardItem> {
   @override
   void initState() {
     super.initState();
-    print("initState");
     _initAnimation();
   }
 
@@ -17,7 +16,7 @@ class _CardItemState extends State<CardItem> {
     _mainLisItemWidth = screenWidth - 48.0;
     // 初始化动画
     final Animation curve =
-    new CurvedAnimation(parent: widget.controller, curve: Curves.easeInOut);
+        new CurvedAnimation(parent: widget.controller, curve: Curves.easeInOut);
     final Tween doubleTween = new Tween<double>(
         begin: _mainLisItemWidth, end: _mainLisItemWidth - 120);
 
@@ -37,7 +36,6 @@ class _CardItemState extends State<CardItem> {
   @override
   void didUpdateWidget(CardItem oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print("didUpdateWidget");
     _initAnimation();
   }
 
@@ -80,7 +78,10 @@ class _CardItemState extends State<CardItem> {
                     splashColor: Colors.orange,
                     icon: new Icon(Icons.delete),
                     color: Colors.redAccent,
-                    onPressed: () {},
+                    onPressed: () {
+                      // 提示
+                      _showDeleteDialog(context);
+                    },
                   )
                 ],
               ),
@@ -110,6 +111,36 @@ class _CardItemState extends State<CardItem> {
       ),
     );
   }
+
+  void _showDeleteDialog(BuildContext context) async {
+    await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return new AlertDialog(
+            title: new Text('是否删除'),
+            content: new Text('确定删除第${widget.index+1}位，'
+                '名字为${widget.item.budgetName}的预算吗？'),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text(
+                  '取消',
+                  style: new TextStyle(color: Colors.grey),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text('确定'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  widget.onDelete(widget.index);
+                },
+              ),
+            ],
+          );
+        });
+  }
 }
 
 class CardItem extends StatefulWidget {
@@ -117,6 +148,7 @@ class CardItem extends StatefulWidget {
     Key key,
     @required this.onTap,
     @required this.onExpand,
+    @required this.onDelete,
     @required this.item,
     @required this.index,
     @required this.controller,
@@ -125,6 +157,7 @@ class CardItem extends StatefulWidget {
 
   final CardIndexCallback onTap;
   final CardIndexCallback onExpand;
+  final CardIndexCallback onDelete;
   final Budget item;
   final bool selected;
   final int index;

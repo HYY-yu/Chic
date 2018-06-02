@@ -7,6 +7,9 @@ dependencies:
   cupertino_icons: ^0.1.0
   sqflite: any
   path_provider: ^0.4.0
+  fluttertoast: ^2.0.3
+  shared_preferences: any
+  uuid: ^1.0.0
 
 dev_dependencies:
   flutter_test:
