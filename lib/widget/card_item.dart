@@ -1,5 +1,6 @@
 import 'package:chic/bean/budget.dart';
 import 'package:chic/util/display.dart';
+import 'package:chic/widget/edit_budget_dialog.dart';
 import 'package:flutter/material.dart';
 
 class _CardItemState extends State<CardItem> {
@@ -71,7 +72,15 @@ class _CardItemState extends State<CardItem> {
                     splashColor: Colors.orange,
                     icon: new Icon(Icons.edit),
                     color: Colors.grey.shade600,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new EditBudgetDialog(widget.item),
+                            fullscreenDialog: true,
+                          ));
+                    },
                   ),
                   new IconButton(
                     iconSize: _iconSize,
@@ -118,7 +127,7 @@ class _CardItemState extends State<CardItem> {
         builder: (BuildContext context) {
           return new AlertDialog(
             title: new Text('是否删除'),
-            content: new Text('确定删除第${widget.index+1}位，'
+            content: new Text('确定删除第${widget.index + 1}位，'
                 '名字为${widget.item.budgetName}的预算吗？'),
             actions: <Widget>[
               new FlatButton(

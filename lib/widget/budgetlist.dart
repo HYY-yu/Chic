@@ -3,7 +3,6 @@ import 'package:chic/widget/card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:async';
 
 class BudgetList extends StatefulWidget {
   @override
