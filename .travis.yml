@@ -24,71 +24,67 @@ jobs:
         - ./flutter/bin/flutter upgrade
         - ./flutter/bin/flutter test
     - stage: deploy
-      matrix:
-        include:
-          # Builds an APK.
-          - os: linux
-            language: android
-            licenses:
-              - 'android-sdk-preview-license-.+'
-              - 'android-sdk-license-.+'
-              - 'google-gdk-license-.+'
-            android:
-              components:
-                - tools
-                - platform-tools
-                - build-tools-27.0.3
-                - android-27
-                - sys-img-armeabi-v7a-google_apis-25
-                - extra-android-m2repository
-                - extra-google-m2repository
-                - extra-google-android-support
-            jdk: oraclejdk8
-            sudo: false
-            addons:
-              apt:
-                sources:
-                  - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
-                packages:
-                  - libstdc++6
-                  - fonts-droid
-            before_script:
-              - wget http://services.gradle.org/distributions/gradle-4.4-bin.zip
-              - unzip -qq gradle-4.4-bin.zip
-              - export GRADLE_HOME=$PWD/gradle-4.4
-              - export PATH=$GRADLE_HOME/bin:$PATH
-              - git clone https://github.com/flutter/flutter.git -b beta --depth 1
-            script:
-              - ./flutter/bin/flutter upgrade
-              - ./flutter/bin/flutter -v build apk
-            deploy:
-              provider: releases
-              skip_cleanup: true
-              api_key:
-                secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
-              file: "/User/travis/HYY-yu/Chic/build/app/outputs/apk/release/app-release.apk"
-              on:
-                tags: true 
+        - os: linux
+          language: android
+          licenses:
+            - 'android-sdk-preview-license-.+'
+            - 'android-sdk-license-.+'
+            - 'google-gdk-license-.+'
+          android:
+            components:
+              - tools
+              - platform-tools
+              - build-tools-27.0.3
+              - android-27
+              - sys-img-armeabi-v7a-google_apis-25
+              - extra-android-m2repository
+              - extra-google-m2repository
+              - extra-google-android-support
+          jdk: oraclejdk8
+          sudo: false
+          addons:
+            apt:
+              sources:
+                - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
+              packages:
+                - libstdc++6
+                - fonts-droid
+          before_script:
+            - wget http://services.gradle.org/distributions/gradle-4.4-bin.zip
+            - unzip -qq gradle-4.4-bin.zip
+            - export GRADLE_HOME=$PWD/gradle-4.4
+            - export PATH=$GRADLE_HOME/bin:$PATH
+            - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+          script:
+            - ./flutter/bin/flutter upgrade
+            - ./flutter/bin/flutter -v build apk
+          deploy:
+            provider: releases
+            skip_cleanup: true
+            api_key:
+              secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
+            file: "/User/travis/HYY-yu/Chic/build/app/outputs/apk/release/app-release.apk"
+            on:
+              tags: true 
           # Builds an IPA.
-          - os: osx
-            language: generic
-            osx_image: xcode9.2
-            before_script:
-              - pip2 install six
-              - brew update
-              - brew install libimobiledevice
-              - brew install ideviceinstaller
-              - brew install ios-deploy
-              - git clone https://github.com/flutter/flutter.git -b beta --depth 1
-            script:
-              - ./flutter/bin/flutter upgrade
-              - ./flutter/bin/flutter -v build ios --no-codesign
-            deploy:
-              provider: releases
-              skip_cleanup: true
-              api_key:
-                secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
-              file: "/User/travis/HYY-yu/Chic/build/ios/iphoneos/Runner.app"
-              on:
-                tags: true
-
+        - os: osx
+          language: generic
+          osx_image: xcode9.2
+          before_script:
+            - pip2 install six
+            - brew update
+            - brew install libimobiledevice
+            - brew install ideviceinstaller
+            - brew install ios-deploy
+            - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+          script:
+            - ./flutter/bin/flutter upgrade
+            - ./flutter/bin/flutter -v build ios --no-codesign
+          deploy:
+            provider: releases
+            skip_cleanup: true
+            api_key:
+              secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
+            file: "/User/travis/HYY-yu/Chic/build/ios/iphoneos/Runner.app"
+            on:
+              tags: true
