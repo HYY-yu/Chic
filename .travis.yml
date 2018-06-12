@@ -1,87 +1,97 @@
 cache:
   directories:
-    - "$HOME/.pub-cache"
+  - "$HOME/.pub-cache"
 jobs:
   include:
-    - stage: test
-      os: linux
-      language: generic
-      sudo: false
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test 
-          packages:
-            - libstdc++6
-            - fonts-droid
-      before_script:
-        - git clone https://github.com/flutter/flutter.git -b beta --depth 1
-      script:
-        - ./flutter/bin/flutter upgrade
-        - ./flutter/bin/flutter test
-    - stage: deployAPK 
-      os: linux
-      language: android
-      licenses:
-        - 'android-sdk-preview-license-.+'
-        - 'android-sdk-license-.+'
-        - 'google-gdk-license-.+'
-      android:
-        components:
-          - tools
-          - platform-tools
-          - build-tools-27.0.3
-          - android-27
-          - sys-img-armeabi-v7a-google_apis-25
-          - extra-android-m2repository
-          - extra-google-m2repository
-          - extra-google-android-support
-      jdk: oraclejdk8
-      sudo: false
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test 
-          packages:
-            - libstdc++6
-            - fonts-droid
-      before_script:
-        - wget http://services.gradle.org/distributions/gradle-4.4-bin.zip
-        - unzip -qq gradle-4.4-bin.zip
-        - export GRADLE_HOME=$PWD/gradle-4.4
-        - export PATH=$GRADLE_HOME/bin:$PATH
-        - git clone https://github.com/flutter/flutter.git -b beta --depth 1
-      script:
-        - ./flutter/bin/flutter upgrade
-        - ./flutter/bin/flutter -v build apk
-      deploy:
-        provider: releases
-        skip_cleanup: true
-        api_key:
-          secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
-        file: "build/app/outputs/apk/release/app-release.apk"
-        on:
-          tags: true
-    - stage: deployIPA
-      os: osx
-      language: generic
-      osx_image: xcode9.2
-      before_script:
-        - pip2 install six
-        - brew update
-        - brew install libimobiledevice
-        - brew install ideviceinstaller
-        - brew install ios-deploy
-        - git clone https://github.com/flutter/flutter.git -b beta --depth 1
-      script:
-        - ./flutter/bin/flutter upgrade
-        - ./flutter/bin/flutter -v build ios --no-codesign
-      deploy:
-        provider: releases
-        skip_cleanup: true
-        api_key:
-          secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
-        file: "build/ios/iphoneos/Runner.app"
-        on:
-          tags: true
- 
+  - stage: test
+    os: linux
+    language: generic
+    sudo: false
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - libstdc++6
+        - fonts-droid
+    before_script:
+    - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+    script:
+    - "./flutter/bin/flutter upgrade"
+    - "./flutter/bin/flutter test"
+  - stage: deployAPK
+    os: linux
+    language: android
+    licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+
+    android:
+      components:
+      - tools
+      - platform-tools
+      - build-tools-27.0.3
+      - android-27
+      - sys-img-armeabi-v7a-google_apis-25
+      - extra-android-m2repository
+      - extra-google-m2repository
+      - extra-google-android-support
+    jdk: oraclejdk8
+    sudo: false
+    env: APK_OUTPUT=build/app/outputs/apk/release/app-release.apk
+    addons:
+      apt:
+        sources:
+        - ubuntu-toolchain-r-test
+        packages:
+        - libstdc++6
+        - fonts-droid
+    before_script:
+    - openssl aes-256-cbc -K $encrypted_a1a476bece9a_key -iv $encrypted_a1a476bece9a_iv
+      -in feng.jks.enc -out feng.jks -d
+    - wget http://services.gradle.org/distributions/gradle-4.4-bin.zip
+    - unzip -qq gradle-4.4-bin.zip
+    - export GRADLE_HOME=$PWD/gradle-4.4
+    - export PATH=$GRADLE_HOME/bin:$PATH
+    - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+    script:
+    - "./flutter/bin/flutter upgrade"
+    - "./flutter/bin/flutter -v build apk --release"
+    - jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore feng.jks -storepass $storepass -keypass $keypass $APK_OUTPUT feng
+    - jarsigner -verify $APK_OUTPUT
+    - "${ANDROID_HOME}/build-tools/27.0.3/zipalign -v 4 $APK_OUTPUT Chic.apk"
+    deploy:
+      provider: releases
+      skip_cleanup: true
+      api_key:
+        secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
+      file: Chic.apk
+      on:
+        tags: true
+  - stage: deployIPA
+    os: osx
+    language: generic
+    osx_image: xcode9.2
+    before_script:
+    - pip2 install six
+    - brew update
+    - brew install libimobiledevice
+    - brew install ideviceinstaller
+    - brew install ios-deploy
+    - git clone https://github.com/flutter/flutter.git -b beta --depth 1
+    script:
+    - "./flutter/bin/flutter upgrade"
+    - "./flutter/bin/flutter -v build ios --release --no-codesign"
+    deploy:
+      provider: releases
+      skip_cleanup: true
+      api_key:
+        secure: uDRE0d3gZ5JYhl/jBiDp5zv32fHW0WMhJuhg/H4oDOxvYvyCD/1dmBMb00fFFL4gDFxl96wCGMnFcn3f55Xy8IeVMocvrQrIwRkEWsD+4vpzxFr+EBNObjyFW/jQJR3FNXpOJfWNt5unpRsmwWhUpuo7s/PJ1ONqZTctt0VYHXHY5ACmdPx9Tf6U0iAUloQyBeIfYtLN82fB4gewx7sKCnQulerGquXduthVj8URXZzS/3jMJqPL2cqGsjKZ79DPDLzVAulMmhFHs6VVeM2F2HO/GKx58ApLkltFNdoXjdmGSlvuqT1ZAJ0fOlVW78hEVmpxbbQlDPztHThFDlag4uPnlgAFm+OUZ5XXJBeJGkrGU6zRGIcghTQng9JQ3wvL1LVr+2c/MVU8n7+E2SQs7f7TF8kvSm4ok2FpH5zgEuiTIZSNicJO4ceLtigRLySnmbjgKXL1f9O1P8OENuU4hFJ+6WNJtSkzG/MeDGUKPE29rZxA62/+gmQAywDCq7R70kUae4P0XHeneorWnSUyuHhIyRVl0fY22q7U8cY6eTmARTDRKVlykFLvUN2KV8HG2f+VReG64IX93Ge48YI8H8QqeY38HzJQ0nuuF1W84omOFJKtLdtJhg2/5uiaPe7kQ1SmIcrIuqLLZqA0GelP+wLEOtGCm6bMpZdeJECPRbw=
+      file: build/ios/iphoneos/Runner.app
+      on:
+        tags: true
+env:
+  global:
+  - secure: Zx6BLVT9KDlBu9hYauDaGVjOKXqSZl/+8VOIIReCtN3HhZ44GmPtKdUNIqieUA9I3TG526uNl7bCgDLcexOsRPXZhC/91RUF96jzNmvTuZ3DbH2MhMdWn6XXwWXPn5NDmdeLhuXLad10E3CXPEOV9lbgN0HqbdN6ewcfPUHTZJa/MaHqclUsCBQPBTtDVpTgEYZK3FrNsIZFr27WPhrlsr+QyopfxsA/YUs1768Q8nddriKi+9VRMh2F0f0uQxo4cJ99j2JhCC0DOSgn2ShPT/asmMbrYZWKmoJB/4vpeAzVfaxbAS9kany5R7CplNOJg5b5wAwcVZLBBegzI6g3SEpj7fLvJqNlefPUWAEXjuJpLqN1vGrCDKIC177Ud5j2zr5GZo0wohVoLi9K4owTySb+cR2O1ms+ousOMQuBSRKyUZIrPT8hRSk5VXCe5z40Nmu2FjFhB8c6DD61UrQnEHpoK/c1vcPAX2cKECZQsIO2i3rODlHjIAb4qcX+emdsfG53YP9CrojgSwhjxJ6NCWWjWoFUkWEh/Wa5wE5lcRLsG0lHn3idcd2ux150+9+06g+WDNELgIT6pAAXOjTlKP57WQ4YCLl99VdqEKTaxPuPPh/e4dTj5JFcwzDLqNUC18IKbmk/9KEkVT/VIU2aVq5pb9hFEpHi/78e/G94INU=
+  - secure: U6ghBaO0I2v4dhzK5Mvq0y85hYrNPXZ3JooyJVwFuGTP7NSynWOBiH+FuwO2TMK6l4wUlxAatV6Qoi814RU4+o0A024VvoX49V78FAZ1Jjp/NcynIuhm4TGjMiw/tByGrTuFTNZhBYI16tCi4jF9Xn3EiHn3DxjPPx4MfmQk19hYkHamxWI/aM5Hdf56NOcnA2+A1haJcJrF7bK2OtnfQnPEzmAyoFyjKNjmMftcJvBUu9ksy1vvbb45POUguricbhMh7mYdtu+wxVASsHWP4H/edHZ9fDshI/DvgnLmJ8/lN1wroJGh4xX+jVUUQAanNTead4lBRl9pJPMMhIi7jRhv0gX9+pHll0D4PsRYKYGTDxWNkgLWsbWpDjR1V29nY4A6+1ZwvrPTe5LPtHvkeO6EoSXSKSgjbIVQIUQIG+zr6iEesBf0R9Dbg9a+Ri8LKTwhDT0+8vGz84HSS2ycksblqrqff+6AeHaBQHcHCdnX8ZDFAx8th/+nz077QaLSkkmUS/24181OBwODWlIw/GQbImMI6nVAckTQmvCGohwG5vQVMSF4qFW4z59uC8KiQKMZ2OTAnDU1Terw5e+s6aE4wdNOZM75CNwPSRsY3pF+pVyPKpjw/SMhvRyoXCnczuVAm/UgRQKrlS1t2r86WjLoTkwKYNiOClnfNosISGY=
+
