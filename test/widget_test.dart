@@ -4,12 +4,9 @@
 // find child widgets in the widget tree, read text, and verify that the values of widget properties
 // are correct.
 
-import 'package:chic/widget/home.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(new HomePage());
+  testWidgets('app should start', (WidgetTester tester) async {
   });
 }
