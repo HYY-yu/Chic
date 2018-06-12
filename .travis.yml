@@ -59,7 +59,7 @@ jobs:
         skip_cleanup: true
         api_key:
           secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
-        file: "/User/travis/HYY-yu/Chic/build/app/outputs/apk/release/app-release.apk"
+        file: "build/app/outputs/apk/release/app-release.apk"
         on:
           tags: true
     - stage: deployIPA
@@ -81,7 +81,7 @@ jobs:
         skip_cleanup: true
         api_key:
           secure: H0TJKWNSPrFdilsZahcv9E/88xzF/dprUNk1rvx/H4qSrtnFL0r4AEI2OiLNG0Q2aVs3ISiV6YEVSAf0rPZ9kXcBDhC7Jfswfyh6HnB0lwVjTNYXvQzAtQBdtdG2q3fISkAacxuhBofgvXWvbh7SxpXp55ePH2+CDMh2L1RlHFXeEDcQDZUOiYy0svE/z156cpHtBGgp72hYW+hMmzEvYNPq1itXNF1ICojsFtUEm2ddR78iSAKNGtORYI2ZQvB8qSZdfx8AlWvuCg/UU0tBNpRVXV8HUrcBooggk3mCK6K2FX7Wft32FbwTBAD76Oh7wURVkOJ7Qx/6isXalHxB9dy4ESUzR7TuTHUXk16VYS9lPC17rXrPkBJthVRzFXCqCVab/jZ7qqsjDnSmyl6ujevHJZaVTMjmENgmoXCTyteh1SLiTt/bvxDDIDtX075GwZ+7YTeAP2sAeIczk+5Ze7/3BQJBQubvTpjj6yw/aNk+tAPOL0sNYnC+3Fr3bhjFdHZGQIGH+slXms463kfHZvGAb/Qb8l9ixGthlctg4vJc8v5Ql9hkio/sieSAHrKiUxS+Qrcl9rAg2qBzv33wFv9EMLqV/Izxw+I27LaZDlwkCJ2/t1LgaT2/6i5sqQLPnBjwp6ZeGQSlZH1O6jM8d0s09hn1DL/LRczo2NcydgA=
-        file: "/User/travis/HYY-yu/Chic/build/ios/iphoneos/Runner.app"
+        file: "build/ios/iphoneos/Runner.app"
         on:
           tags: true
  
