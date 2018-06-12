@@ -13,7 +13,7 @@ matrix:
             - libstdc++6
             - fonts-droid
       before_script:
-        - wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+        - wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
         - mkdir android-sdk
         - unzip -qq sdk-tools-linux-3859397.zip -d android-sdk
         - export ANDROID_HOME=`pwd`/android-sdk
@@ -28,7 +28,7 @@ matrix:
         - echo y | sdkmanager "extras;google;m2repository"
         - echo y | sdkmanager "patcher;v4"
         - sdkmanager --list
-        - wget http://services.gradle.org/distributions/gradle-3.5-bin.zip
+        - wget -q http://services.gradle.org/distributions/gradle-3.5-bin.zip
         - unzip -qq gradle-3.5-bin.zip
         - export GRADLE_HOME=$PWD/gradle-3.5
         - export PATH=$GRADLE_HOME/bin:$PATH
@@ -59,3 +59,11 @@ matrix:
 cache:
   directories:
     - $HOME/.pub-cache
+
+deploy:
+  provider: releases
+  api_key: "GITHUB OAUTH TOKEN"
+  file:
+    - "/Users/travis/build/HYY-yu/Chic/build/ios/iphoneos/Runner.app"
+    - "/Users/travis/build/HYY-yu/Chic/build/ios/iphoneos/Runner.app"
+  skip_cleanup: true
