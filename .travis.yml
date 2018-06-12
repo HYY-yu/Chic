@@ -61,7 +61,6 @@ matrix:
         file: "/User/travis/HYY-yu/Chic/build/app/outputs/apk/release/app-release.apk"
         on:
           tags: true
-          all_branches: true
     # Builds an IPA.
     - os: osx
       language: generic
@@ -83,7 +82,6 @@ matrix:
         file: "/User/travis/HYY-yu/Chic/build/ios/iphoneos/Runner.app"
         on:
           tags: true
-          all_branches: true
 cache:
   directories:
   - "$HOME/.pub-cache"
