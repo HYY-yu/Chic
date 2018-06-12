@@ -1,6 +1,3 @@
-stages:
-  - test
-  - deploy
 cache:
   directories:
     - "$HOME/.pub-cache"
