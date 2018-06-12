@@ -72,11 +72,11 @@ jobs:
     - brew install ideviceinstaller
     - brew install ios-deploy
     - git clone https://github.com/flutter/flutter.git -b beta --depth 1
-    - brew upgrade cocoapods
-    - pod setup
     script:
     - "./flutter/bin/flutter upgrade"
-    - "./flutter/bin/flutter -v build ios --debug --no-codesign"
+    - brew upgrade cocoapods
+    - pod setup
+    - "./flutter/bin/flutter -v build ios --release --no-codesign"
     deploy:
       provider: releases
       skip_cleanup: true
