@@ -1,8 +1,7 @@
 matrix:
   include:
     # Runs unit tests without emulators.
-    - env: JOB=PR
-      os: linux
+    - os: linux
       language: generic
       sudo: false
       addons:
@@ -20,8 +19,7 @@ matrix:
         - ./flutter/bin/flutter test
 
     # Builds an APK.
-    - env: JOB=APK
-      os: linux
+    - os: linux
       language: android
       licenses:
         - 'android-sdk-preview-license-.+'
@@ -48,9 +46,9 @@ matrix:
             - libstdc++6
             - fonts-droid
       before_script:
-        - wget http://services.gradle.org/distributions/gradle-3.5-bin.zip
-        - unzip -qq gradle-3.5-bin.zip
-        - export GRADLE_HOME=$PWD/gradle-3.5
+        - wget http://services.gradle.org/distributions/gradle-4.4-bin.zip
+        - unzip -qq gradle-4.4-bin.zip
+        - export GRADLE_HOME=$PWD/gradle-4.4
         - export PATH=$GRADLE_HOME/bin:$PATH
         - git clone https://github.com/flutter/flutter.git -b beta --depth 1
       script:
@@ -58,12 +56,11 @@ matrix:
         - ./flutter/bin/flutter -v build apk
 
     # Builds an IPA.
-    - env: JOB=IPA
-      os: osx
+    - os: osx
       language: generic
-      osx_image: xcode8.3
+      osx_image: xcode9.2
       before_script:
-        - pip install six
+        - pip2 install six
         - brew update
         - brew install --HEAD libimobiledevice
         - brew install ideviceinstaller
@@ -83,4 +80,4 @@ deploy:
   - "/User/travis/HYY-yu/Chic/build/ios/iphoneos/Runner.app"
   - "/User/travis/HYY-yu/Chic/build/app/outputs/apk/release/app-release.apk"
   on:
-    repo: HYY-yu/Chic
+    tag: true
