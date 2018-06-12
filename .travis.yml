@@ -33,7 +33,8 @@ matrix:
         - export GRADLE_HOME=$PWD/gradle-3.5
         - export PATH=$GRADLE_HOME/bin:$PATH
         - gradle -v
-        - git clone https://github.com/flutter/flutter.git --depth 1
+        - git clone https://github.com/flutter/flutter.git
+        - ./flutter/bin/flutter channel beta
         - ./flutter/bin/flutter doctor
       script:
         - ./flutter/bin/flutter test
@@ -48,7 +49,8 @@ matrix:
         - brew install libimobiledevice
         - brew install ideviceinstaller
         - brew install ios-deploy
-        - git clone https://github.com/flutter/flutter.git --depth 1
+        - git clone https://github.com/flutter/flutter.git
+        - ./flutter/bin/flutter channel beta
         - ./flutter/bin/flutter doctor
       script:
         - ./flutter/bin/flutter test
