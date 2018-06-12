@@ -48,7 +48,7 @@ jobs:
         - fonts-droid
     before_script:
     - openssl aes-256-cbc -K $encrypted_faf484425141_key -iv $encrypted_faf484425141_iv -in key.properties.enc -out android/key.properties -d
-    - openssl aes-256-cbc -K $encrypted_a1a476bece9a_key -iv $encrypted_a1a476bece9a_iv -in feng.jks.enc -out android/feng.jks -d
+    - openssl aes-256-cbc -K $encrypted_a1a476bece9a_key -iv $encrypted_a1a476bece9a_iv -in feng.jks.enc -out android/app/feng.jks -d
     - wget http://services.gradle.org/distributions/gradle-4.4-bin.zip
     - unzip -qq gradle-4.4-bin.zip
     - export GRADLE_HOME=$PWD/gradle-4.4
