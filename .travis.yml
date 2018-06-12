@@ -74,7 +74,7 @@ jobs:
     - git clone https://github.com/flutter/flutter.git -b beta --depth 1
     script:
     - "./flutter/bin/flutter upgrade"
-    - brew upgrade cocoapods
+    - gem install cocoapods
     - pod setup
     - "./flutter/bin/flutter -v build ios --release --no-codesign"
     deploy:
