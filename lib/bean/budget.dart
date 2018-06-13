@@ -50,6 +50,17 @@ class Budget extends SQLModel {
     }
   }
 
+  Budget.copy(Budget old) {
+    this._budgetID = old._budgetID;
+    this._budgetName = old._budgetName;
+    this._currencyID = old._currencyID;
+    this._startDateTime = old._startDateTime;
+    this._whichDayStart = old._whichDayStart;
+    this._budgetTotal = old._budgetTotal;
+    this._budgetSurplus = old._budgetSurplus;
+    this._budgetAccumulated = old._budgetAccumulated;
+  }
+
   Budget.newBudget(
       this._budgetID,
       this._budgetName,
