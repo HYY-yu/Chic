@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:chic/bean/db.dart';
 import 'package:chic/bean/currency.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:chic/bean/db.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 class Budget extends SQLModel {
@@ -106,6 +106,14 @@ class Budget extends SQLModel {
       return Budget.fromMap(budgetList.first);
     }
     return null;
+  }
+
+  static Future<int> updateBudgetFrom(Budget updateBudget) async {
+    var db = await dbHelper.getDb();
+    var data = updateBudget.toMap();
+    data.remove("$fieldBudgetID");
+    return db.update(tableName, data,
+        where: "$fieldBudgetID = ?", whereArgs: [updateBudget.budgetID]);
   }
 
   static Future<int> deleteBudgetByBudgetID(String budgetID) async {

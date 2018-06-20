@@ -110,6 +110,9 @@ class _BudgetListState extends State<BudgetList>
         }
         _expandIndex = i;
       },
+      onUpdate: (i){
+        _loadBudgetList();
+      },
     );
 
     return item;

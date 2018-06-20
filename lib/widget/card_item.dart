@@ -73,13 +73,18 @@ class _CardItemState extends State<CardItem> {
                     icon: new Icon(Icons.edit),
                     color: Colors.grey.shade600,
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new EditBudgetDialog(widget.item),
-                            fullscreenDialog: true,
-                          ));
+                      Navigator
+                          .push<Budget>(
+                              context,
+                              new MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    new EditBudgetDialog(widget.item),
+                                fullscreenDialog: true,
+                              ))
+                          .then((budget) {
+                        // 更新Item
+                        widget.onUpdate(widget.index);
+                      });
                     },
                   ),
                   new IconButton(
@@ -158,6 +163,7 @@ class CardItem extends StatefulWidget {
     @required this.onTap,
     @required this.onExpand,
     @required this.onDelete,
+    @required this.onUpdate,
     @required this.item,
     @required this.index,
     @required this.controller,
@@ -167,6 +173,7 @@ class CardItem extends StatefulWidget {
   final CardIndexCallback onTap;
   final CardIndexCallback onExpand;
   final CardIndexCallback onDelete;
+  final CardIndexCallback onUpdate;
   final Budget item;
   final bool selected;
   final int index;
