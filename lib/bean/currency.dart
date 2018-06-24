@@ -4,27 +4,9 @@ import 'package:chic/bean/db.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Currency extends SQLModel {
-  int _currencyID;
-  String _currencyName;
-  String _currencySymbol;
-
-  int get currencyID => _currencyID;
-
-  set currencyID(int value) {
-    _currencyID = value;
-  }
-
-  String get currencyName => _currencyName;
-
-  String get currencySymbol => _currencySymbol;
-
-  set currencySymbol(String value) {
-    _currencySymbol = value;
-  }
-
-  set currencyName(String value) {
-    _currencyName = value;
-  }
+  int currencyID;
+  String currencyName;
+  String currencySymbol;
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
@@ -38,7 +20,7 @@ class Currency extends SQLModel {
   Currency();
 
   Currency.newCurrency(
-      this._currencyID, this._currencyName, this._currencySymbol);
+      this.currencyID, this.currencyName, this.currencySymbol);
 
   Currency.fromMap(Map<String, dynamic> map) {
     currencyID = map[fieldCurrencyID];

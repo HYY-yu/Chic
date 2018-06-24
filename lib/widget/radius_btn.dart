@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 
 class RadiusButton extends StatelessWidget {
+  final String text;
+  final double horizontalPadding;
+  final double textSize;
+
+  const RadiusButton(
+    this.text,
+    this.horizontalPadding,
+    this.textSize,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 24.0, right: 24.0, top: 8.0, bottom: 8.0),
+      padding:
+          EdgeInsets.symmetric(vertical: 8.0, horizontal: horizontalPadding),
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           color: Colors.orange,
           borderRadius: BorderRadius.all(Radius.circular(100.0))),
       child: new Text(
-        "查看每日预算",
+        text,
         style: TextStyle(
-            fontSize: 20.0,
+            fontSize: textSize,
             fontWeight: FontWeight.w100,
             color: Colors.white,
             decoration: TextDecoration.none),

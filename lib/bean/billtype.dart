@@ -2,10 +2,10 @@ import 'package:chic/bean/db.dart';
 
 class BillType extends SQLModel {
   // 1001 - 1999 系统定义  2000 - 2999 用户自定义
-  int _typeID;
-  String _typeName;
-  String _typeIcon;
-  int _typeFlag;
+  int typeID;
+  String typeName;
+  String typeIcon;
+  int typeFlag;
 
   @override
   String createTableSQL() {
@@ -41,29 +41,5 @@ class BillType extends SQLModel {
     typeName = map[fieldTypeName];
     typeIcon = map[fieldTypeIcon];
     typeFlag = map[fieldTypeFlag];
-  }
-
-  int get typeID => _typeID;
-
-  set typeID(int value) {
-    _typeID = value;
-  }
-
-  String get typeName => _typeName;
-
-  set typeName(String value) {
-    _typeName = value;
-  }
-
-  String get typeIcon => _typeIcon;
-
-  set typeIcon(String value) {
-    _typeIcon = value;
-  }
-
-  int get typeFlag => _typeFlag;
-
-  set typeFlag(int value) {
-    _typeFlag = value;
   }
 }

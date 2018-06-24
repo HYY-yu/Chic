@@ -2,6 +2,23 @@ import 'package:chic/bean/budget.dart';
 import 'package:flutter/material.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+class _BudgetUpdateFlag {
+  String budgetID;
+  String budgetName;
+  int whichDayStart;
+  double budgetTotal;
+  double budgetSurplus;
+  bool budgetAccumulated;
+
+  _BudgetUpdateFlag(
+    this.budgetID,
+  )   : this.budgetName = "",
+        this.whichDayStart = 0,
+        this.budgetTotal = 0.0,
+        this.budgetSurplus = 0.0,
+        this.budgetAccumulated = false;
+}
+
 class EditBudgetDialog extends StatefulWidget {
   final Budget item;
 
@@ -15,11 +32,13 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   Budget _dataItem;
+  _BudgetUpdateFlag _budgetUpdateFlag;
 
   @override
   void initState() {
     super.initState();
     _dataItem = new Budget.copy(widget.item);
+    _budgetUpdateFlag = new _BudgetUpdateFlag(_dataItem.budgetID);
   }
 
   String _validateAmount(String amount) {
@@ -81,7 +100,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                   hintText: _dataItem.budgetName,
                 ),
                 onSaved: (value) {
-                  _dataItem.budgetName = value;
+                  _budgetUpdateFlag.budgetName = value;
                 },
                 validator: (va) {
                   if (va.isNotEmpty) {
@@ -109,7 +128,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                 onSaved: (va) {
                   if (va.isNotEmpty) {
                     var total = double.parse(va);
-                    _dataItem.budgetTotal = total;
+                    _budgetUpdateFlag.budgetTotal = total;
                   }
                 },
                 validator: _validateAmount,
@@ -132,7 +151,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                 onSaved: (va) {
                   if (va.isNotEmpty) {
                     var surplus = double.parse(va);
-                    _dataItem.budgetSurplus = surplus;
+                    _budgetUpdateFlag.budgetSurplus = surplus;
                   }
                 },
                 validator: _validateAmount,
@@ -149,9 +168,10 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                   new Expanded(child: new Text("是否滚存")),
                   new Checkbox(
                     value: _dataItem.budgetAccumulated,
-                    onChanged: (c) {
+                    onChanged: (value) {
                       setState(() {
-                        _dataItem.budgetAccumulated = c;
+                        _budgetUpdateFlag.budgetAccumulated = value;
+                        _dataItem.budgetAccumulated = value;
                       });
                     },
                   ),
@@ -172,6 +192,7 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
                             minValue: 1,
                             maxValue: 31,
                             onChanged: (num) {
+                              _budgetUpdateFlag.whichDayStart = num;
                               setState(() {
                                 _dataItem.whichDayStart = num;
                               });
@@ -199,9 +220,12 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
               new RaisedButton(
                 onPressed: _handleSubmitted,
                 color: Colors.grey.shade300,
-                padding: EdgeInsets.symmetric(vertical: 16.0),
+                padding: EdgeInsets.all(16.0),
                 child: new Text("保 存"),
               ),
+              const SizedBox(
+                height: 16.0,
+              )
             ],
           ),
         ),
@@ -219,9 +243,35 @@ class _EditBudgetDialogState extends State<EditBudgetDialog> {
     if (form.validate()) {
       form.save();
 
-      // Save
-      Budget.updateBudgetFrom(_dataItem);
-      Navigator.pop(context, _dataItem);
+      // Get Value
+      if (_budgetUpdateFlag != null) {
+        Map<String, dynamic> data = new Map();
+
+        if (_budgetUpdateFlag.budgetName.isNotEmpty) {
+          data[Budget.fieldBudgetName] = _budgetUpdateFlag.budgetName;
+        }
+
+        if (_budgetUpdateFlag.whichDayStart != 0) {
+          data[Budget.fieldWhichDayStart] = _budgetUpdateFlag.whichDayStart;
+        }
+
+        if (_budgetUpdateFlag.budgetTotal != 0.0) {
+          data[Budget.fieldBudgetTotal] = _budgetUpdateFlag.budgetTotal;
+        }
+
+        if (_budgetUpdateFlag.budgetSurplus != 0.0) {
+          data[Budget.fieldBudgetSurplus] = _budgetUpdateFlag.budgetSurplus;
+        }
+
+        data[Budget.fieldBudgetAccumulated] =
+            _budgetUpdateFlag.budgetAccumulated;
+
+        if (data.isNotEmpty) {
+          Budget.updateBudgetBy(_budgetUpdateFlag.budgetID, data);
+        }
+      }
+
+      Navigator.pop(context);
     }
   }
 }

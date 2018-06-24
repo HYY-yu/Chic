@@ -3,11 +3,11 @@ import 'package:chic/bean/db.dart';
 import 'package:chic/bean/budget.dart';
 
 class Bill extends SQLModel {
-  String _billID;
-  String _budgetID;
-  double _billAmount;
-  int _billTypeID;
-  int _createDateTime;
+  String billID;
+  String budgetID;
+  double billAmount;
+  int billTypeID;
+  int createDateTime;
 
   @override
   String createTableSQL() {
@@ -53,35 +53,5 @@ class Bill extends SQLModel {
     billAmount = map[fieldBillAmount];
     billTypeID = map[fieldBillTypeID];
     createDateTime = map[fieldCreateDateTime];
-  }
-
-  int get createDateTime => _createDateTime;
-
-  set createDateTime(int value) {
-    _createDateTime = value;
-  }
-
-  int get billTypeID => _billTypeID;
-
-  set billTypeID(int value) {
-    _billTypeID = value;
-  }
-
-  double get billAmount => _billAmount;
-
-  set billAmount(double value) {
-    _billAmount = value;
-  }
-
-  String get budgetID => _budgetID;
-
-  set budgetID(String value) {
-    _budgetID = value;
-  }
-
-  String get billID => _billID;
-
-  set billID(String value) {
-    _billID = value;
   }
 }

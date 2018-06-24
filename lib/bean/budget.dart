@@ -9,14 +9,14 @@ import 'package:uuid/uuid.dart';
 class Budget extends SQLModel {
   static String SPBudgetKey = "SPBudgetKey";
 
-  String _budgetID;
-  String _budgetName;
-  int _currencyID;
-  int _startDateTime;
-  int _whichDayStart;
-  double _budgetTotal;
-  double _budgetSurplus;
-  bool _budgetAccumulated;
+  String budgetID;
+  String budgetName;
+  int currencyID;
+  int startDateTime;
+  int whichDayStart;
+  double budgetTotal;
+  double budgetSurplus;
+  bool budgetAccumulated;
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
@@ -51,25 +51,25 @@ class Budget extends SQLModel {
   }
 
   Budget.copy(Budget old) {
-    this._budgetID = old._budgetID;
-    this._budgetName = old._budgetName;
-    this._currencyID = old._currencyID;
-    this._startDateTime = old._startDateTime;
-    this._whichDayStart = old._whichDayStart;
-    this._budgetTotal = old._budgetTotal;
-    this._budgetSurplus = old._budgetSurplus;
-    this._budgetAccumulated = old._budgetAccumulated;
+    this.budgetID = old.budgetID;
+    this.budgetName = old.budgetName;
+    this.currencyID = old.currencyID;
+    this.startDateTime = old.startDateTime;
+    this.whichDayStart = old.whichDayStart;
+    this.budgetTotal = old.budgetTotal;
+    this.budgetSurplus = old.budgetSurplus;
+    this.budgetAccumulated = old.budgetAccumulated;
   }
 
   Budget.newBudget(
-      this._budgetID,
-      this._budgetName,
-      this._currencyID,
-      this._startDateTime,
-      this._whichDayStart,
-      this._budgetTotal,
-      this._budgetSurplus,
-      this._budgetAccumulated);
+      this.budgetID,
+      this.budgetName,
+      this.currencyID,
+      this.startDateTime,
+      this.whichDayStart,
+      this.budgetTotal,
+      this.budgetSurplus,
+      this.budgetAccumulated);
 
   static Future<void> initBudgetTable(Database db) async {
     var now = DateTime.now();
@@ -85,7 +85,7 @@ class Budget extends SQLModel {
         now.millisecondsSinceEpoch, 10, 500.0, 182.0, false);
 
     var pref = await SharedPreferences.getInstance();
-    await pref.setString(SPBudgetKey, budget3._budgetID);
+    await pref.setString(SPBudgetKey, budget3.budgetID);
 
     await _insert(db, budget);
     await _insert(db, budget2);
@@ -109,11 +109,15 @@ class Budget extends SQLModel {
   }
 
   static Future<int> updateBudgetFrom(Budget updateBudget) async {
-    var db = await dbHelper.getDb();
     var data = updateBudget.toMap();
     data.remove("$fieldBudgetID");
+    return updateBudgetBy(updateBudget.budgetID, data);
+  }
+
+  static Future<int> updateBudgetBy(String budgetID, Map<String, dynamic> data) async {
+    var db = await dbHelper.getDb();
     return db.update(tableName, data,
-        where: "$fieldBudgetID = ?", whereArgs: [updateBudget.budgetID]);
+        where: "$fieldBudgetID = ?", whereArgs: [budgetID]);
   }
 
   static Future<int> deleteBudgetByBudgetID(String budgetID) async {
@@ -164,51 +168,4 @@ class Budget extends SQLModel {
   static String fieldBudgetSurplus = "budget_surplus";
   static String fieldBudgetAccumulated = "budget_accumulated";
 
-  bool get budgetAccumulated => _budgetAccumulated;
-
-  set budgetAccumulated(bool value) {
-    _budgetAccumulated = value;
-  }
-
-  double get budgetSurplus => _budgetSurplus;
-
-  set budgetSurplus(double value) {
-    _budgetSurplus = value;
-  }
-
-  double get budgetTotal => _budgetTotal;
-
-  set budgetTotal(double value) {
-    _budgetTotal = value;
-  }
-
-  int get startDateTime => _startDateTime;
-
-  set startDateTime(int value) {
-    _startDateTime = value;
-  }
-
-  int get whichDayStart => _whichDayStart;
-
-  set whichDayStart(int value) {
-    _whichDayStart = value;
-  }
-
-  int get currencyID => _currencyID;
-
-  set currencyID(int value) {
-    _currencyID = value;
-  }
-
-  String get budgetName => _budgetName;
-
-  set budgetName(String value) {
-    _budgetName = value;
-  }
-
-  String get budgetID => _budgetID;
-
-  set budgetID(String value) {
-    _budgetID = value;
-  }
 }

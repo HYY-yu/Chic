@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage>
   double secondOpacity = 0.0;
 
   GlobalKey globalKey = new GlobalKey();
-  bool _first = true;
+  bool _second = false;
 
   void _loadData() async {
     var pref = await SharedPreferences.getInstance();
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage>
         _firstPage(),
         new IgnorePointer(
           child: _secondPage(),
-        )
+        ),
       ],
     );
   }
@@ -128,14 +128,14 @@ class _HomePageState extends State<HomePage>
     controller.reset();
     controller.forward();
     setState(() {
-      _first = false;
+      _second = true;
     });
   }
 
   setFirstPage() {
     controller.stop();
     setState(() {
-      _first = true;
+      _second = false;
     });
   }
 
@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage>
     setSecondPage();
   }
 
-  onTapDragEndEachDay(DragEndDetails detials) {
+  onTapDragEndEachDay(DragEndDetails details) {
     setFirstPage();
   }
 
@@ -151,28 +151,49 @@ class _HomePageState extends State<HomePage>
     setFirstPage();
   }
 
+  List<Offset> _points = <Offset>[];
+
   Widget _firstPage() {
-    return Container(
-      color: Colors.blue,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            flex: 6,
-            child: widgetMain(),
+    return Stack(
+      children: <Widget>[
+        Container(
+          color: Colors.blue,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                flex: 6,
+                child: _widgetMain(),
+              ),
+              Expanded(
+                flex: 1,
+                child: HomeBottomBtn(this),
+              )
+            ],
           ),
-          Expanded(
-            flex: 1,
-            child: HomeBottomBtn(this),
-          )
-        ],
-      ),
+        ),
+//        GestureDetector(
+//          onPanUpdate: (DragUpdateDetails details) {
+//            setState(() {
+//              RenderBox referenceBox = context.findRenderObject();
+//              Offset localPosition =
+//                  referenceBox.globalToLocal(details.globalPosition);
+//              _points = new List.from(_points)..add(localPosition);
+//            });
+//          },
+//          onPanEnd: (DragEndDetails details) => _points.add(null),
+//           CustomPaint(
+//            painter: new SignaturePainter(_points),
+//            size: Size.infinite,
+//          ),
+//        ),
+      ],
     );
   }
 
   Widget _secondPage() {
     return Opacity(
-      opacity: _first ? 0.0 : 1.0,
+      opacity: _second ? 1.0 : 0.0,
       child: new BackdropFilter(
         filter: new ui.ImageFilter.blur(sigmaX: sigma, sigmaY: sigma),
         child: Opacity(
@@ -212,7 +233,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  Widget widgetMain() {
+  Widget _widgetMain() {
     return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -250,7 +271,11 @@ class _HomePageState extends State<HomePage>
             onTapDown: onTapDownEachDay,
             onPanEnd: onTapDragEndEachDay,
             onTapUp: onTapUpEachDay,
-            child: RadiusButton(),
+            child: RadiusButton(
+              "查看每日预算",
+              24.0,
+              20.0,
+            ),
           ),
         ),
       ],
@@ -267,8 +292,9 @@ class _HomePageState extends State<HomePage>
   }
 }
 
+@immutable
 class HomeBottomBtn extends StatelessWidget {
-  _HomePageState state;
+  final _HomePageState state;
 
   HomeBottomBtn(this.state);
 
@@ -325,4 +351,23 @@ class HomeBottomBtn extends StatelessWidget {
       ),
     );
   }
+}
+
+class SignaturePainter extends CustomPainter {
+  SignaturePainter(this.points);
+
+  final List<Offset> points;
+
+  void paint(Canvas canvas, Size size) {
+    var paint = new Paint()
+      ..color = Colors.black
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 5.0;
+    for (int i = 0; i < points.length - 1; i++) {
+      if (points[i] != null && points[i + 1] != null)
+        canvas.drawLine(points[i], points[i + 1], paint);
+    }
+  }
+
+  bool shouldRepaint(SignaturePainter other) => other.points != points;
 }
