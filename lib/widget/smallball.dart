@@ -55,12 +55,12 @@ class _SmallBallState extends State<SmallBall> {
           new Container(
             decoration: new BoxDecoration(
               shape: BoxShape.circle,
-              boxShadow: <BoxShadow>[
-                new BoxShadow(
-                  offset: new Offset(0.0, 5.0),
-                  color: const Color(0x66333333),
-                ),
-              ],
+//              boxShadow: <BoxShadow>[
+//                new BoxShadow(
+//                  offset: new Offset(0.0, 3.0),
+//                  color: const Color(0x66333333),
+//                ),
+//              ],
               color: Colors.white,
             ),
           ),

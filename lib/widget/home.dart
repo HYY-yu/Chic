@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'package:chic/bean/budget.dart';
 import 'package:chic/bean/currency.dart';
 import 'package:chic/util/display.dart';
+import 'package:chic/widget/ball_painter.dart';
 import 'package:chic/widget/budgetlist.dart';
 import 'package:chic/widget/radius_btn.dart';
 import 'package:chic/widget/smallball.dart';
@@ -151,42 +152,78 @@ class _HomePageState extends State<HomePage>
     setFirstPage();
   }
 
-  List<Offset> _points = <Offset>[];
+  Offset startPoint;
+  Offset updatePoint;
+  bool isEnd = false;
+  GlobalKey ballKey = new GlobalKey();
 
   Widget _firstPage() {
     return Stack(
       children: <Widget>[
-        Container(
-          color: Colors.blue,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                flex: 6,
-                child: _widgetMain(),
-              ),
-              Expanded(
-                flex: 1,
-                child: HomeBottomBtn(this),
-              )
-            ],
+        GestureDetector(
+          onPanStart: (DragStartDetails details) {
+            RenderBox referenceBox = context.findRenderObject();
+            Offset localPosition =
+                referenceBox.globalToLocal(details.globalPosition);
+            startPoint = localPosition;
+            isEnd = false;
+          },
+          onPanUpdate: (DragUpdateDetails details) {
+            setState(() {
+              RenderBox referenceBox = context.findRenderObject();
+              Offset localPosition =
+                  referenceBox.globalToLocal(details.globalPosition);
+              updatePoint = localPosition;
+              isEnd = false;
+            });
+          },
+          onPanEnd: (DragEndDetails details) {
+            // 通知本次触摸完结
+            isEnd = true;
+            updatePoint = null;
+            startPoint = null;
+          },
+          child: Container(
+            color: Colors.blue,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  flex: 6,
+                  child: _widgetMain(),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: HomeBottomBtn(this),
+                )
+              ],
+            ),
           ),
         ),
-//        GestureDetector(
-//          onPanUpdate: (DragUpdateDetails details) {
-//            setState(() {
-//              RenderBox referenceBox = context.findRenderObject();
-//              Offset localPosition =
-//                  referenceBox.globalToLocal(details.globalPosition);
-//              _points = new List.from(_points)..add(localPosition);
-//            });
-//          },
-//          onPanEnd: (DragEndDetails details) => _points.add(null),
-//           CustomPaint(
-//            painter: new SignaturePainter(_points),
-//            size: Size.infinite,
-//          ),
-//        ),
+        IgnorePointer(
+          child: CustomPaint(
+            painter: BallPainter(startPoint, updatePoint, isEnd, ballKey),
+            size: Size.infinite,
+          ),
+        ),
+        IgnorePointer(
+          child: Container(
+            width: screenWidth,
+            child: Center(
+                child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 52.0,
+                ),
+                SmallBall(
+                  key: ballKey,
+                  amount: currentBudget.budgetSurplus,
+                  currencyID: currentBudget.currencyID,
+                ),
+              ],
+            )),
+          ),
+        )
       ],
     );
   }
@@ -239,9 +276,8 @@ class _HomePageState extends State<HomePage>
       mainAxisAlignment: MainAxisAlignment.center,
       textDirection: TextDirection.ltr,
       children: <Widget>[
-        SmallBall(
-          amount: currentBudget.budgetSurplus,
-          currencyID: currentBudget.currencyID,
+        SizedBox(
+          height: screenHeight / 2,
         ),
         Padding(
           padding: EdgeInsets.only(top: 24.0),
@@ -351,23 +387,4 @@ class HomeBottomBtn extends StatelessWidget {
       ),
     );
   }
-}
-
-class SignaturePainter extends CustomPainter {
-  SignaturePainter(this.points);
-
-  final List<Offset> points;
-
-  void paint(Canvas canvas, Size size) {
-    var paint = new Paint()
-      ..color = Colors.black
-      ..strokeCap = StrokeCap.round
-      ..strokeWidth = 5.0;
-    for (int i = 0; i < points.length - 1; i++) {
-      if (points[i] != null && points[i + 1] != null)
-        canvas.drawLine(points[i], points[i + 1], paint);
-    }
-  }
-
-  bool shouldRepaint(SignaturePainter other) => other.points != points;
 }
