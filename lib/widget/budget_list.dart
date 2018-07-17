@@ -29,28 +29,28 @@ class _BudgetListState extends State<BudgetList>
   @override
   Widget build(BuildContext context) {
     controllers.clear();
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: new Text("预算列表"),
+        title: Text("预算列表"),
       ),
-      body: new Padding(
-        padding: new EdgeInsets.all(24.0),
-        child: new Column(
+      body: Padding(
+        padding: EdgeInsets.all(24.0),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: new EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
+              padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 16.0),
               child: Text(
                 "我的预算列表 ($_budgetCount)",
-                style: new TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,
                 ),
               ),
             ),
             Expanded(
-              child: new ListView.builder(
+              child: ListView.builder(
                 itemBuilder: _itemBuilder,
                 itemCount: _budgetCount,
               ),

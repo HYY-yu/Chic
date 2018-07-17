@@ -1,5 +1,5 @@
 import 'package:chic/bean/db.dart';
-import 'package:chic/widget/budgetlist.dart';
+import 'package:chic/widget/budget_list.dart';
 import 'package:chic/widget/home.dart';
 import 'package:flutter/material.dart';
 

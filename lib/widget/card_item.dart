@@ -106,7 +106,8 @@ class _CardItemState extends State<CardItem> {
               height: 100.0,
               decoration: BoxDecoration(
                 borderRadius: new BorderRadius.all(new Radius.circular(6.0)),
-                color: widget.selected ? Colors.purple : Colors.grey.shade300,
+                color: widget.selected ? Color(0xFFFFC947) : Colors.grey
+                    .shade300,
               ),
               child: ListTile(
                 title: new Text(widget.item.budgetName),

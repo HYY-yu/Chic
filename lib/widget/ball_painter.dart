@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:chic/util/distance.dart';
 import 'package:flutter/material.dart';
 
 class Circle {
@@ -15,6 +16,10 @@ class Circle {
   }
 }
 
+class CircleBuffer {
+  static Circle ballBuffer;
+}
+
 class BallPainter extends CustomPainter {
   BallPainter(this.start, this.update, this.end, this.key);
 
@@ -28,13 +33,15 @@ class BallPainter extends CustomPainter {
 
   void paint(Canvas canvas, Size size) {
     if (end) {
+//      print("end paint");
       canvas.drawColor(Colors.transparent, BlendMode.dstOut);
       return;
     }
-    if (ball == null) {
+
+    if (CircleBuffer.ballBuffer == null) {
+//      print("first paint");
       final ballContext = key.currentContext;
       if (ballContext != null) {
-        // 初始化
         final RenderBox box = ballContext.findRenderObject();
         final pos = box.localToGlobal(Offset.zero);
 
@@ -42,19 +49,28 @@ class BallPainter extends CustomPainter {
         ball = new Circle(box.size.width / 2.0, 0.0, 0.0);
         ball.a = pos.dx + ball.r;
         ball.b = pos.dy + ball.r;
+
+        // 缓存
+        CircleBuffer.ballBuffer = ball;
       }
+    } else {
+      ball = CircleBuffer.ballBuffer;
     }
 
     var paint = new Paint()
       ..color = Colors.white
       ..strokeCap = StrokeCap.round;
 
+    if (update == null) {
+      return;
+    }
+
     canvas.drawColor(Colors.black38, BlendMode.dstOut);
     canvas.drawCircle(update, radius, paint);
     canvas.drawCircle(new Offset(ball.a, ball.b), ball.r, paint);
 
     Circle smallBall = new Circle(radius, update.dx, update.dy);
-    double distance = getDistance(ball.a, ball.b, smallBall.a, smallBall.b);
+    double distance = DistanceUtil.getDistance(ball.a, ball.b, smallBall.a, smallBall.b);
 
     metaball(canvas, paint, smallBall, ball, 0.5, 8.0, ball.r * 1.5, distance);
   }
@@ -107,10 +123,10 @@ class BallPainter extends CustomPainter {
     double angle2a = (angle1 + pi - u2 - (pi - u2 - angle2) * v);
     double angle2b = (angle1 - pi + u2 + (pi - u2 - angle2) * v);
 
-    List<double> p1a1 = getVector(angle1a, radius1);
-    List<double> p1b1 = getVector(angle1b, radius1);
-    List<double> p2a1 = getVector(angle2a, radius2);
-    List<double> p2b1 = getVector(angle2b, radius2);
+    List<double> p1a1 = DistanceUtil.getVector(angle1a, radius1);
+    List<double> p1b1 = DistanceUtil.getVector(angle1b, radius1);
+    List<double> p2a1 = DistanceUtil.getVector(angle2a, radius2);
+    List<double> p2b1 = DistanceUtil.getVector(angle2b, radius2);
 
     List<double> p1a = [p1a1[0] + ball1.a, p1a1[1] + ball1.b];
     List<double> p1b = [p1b1[0] + ball1.a, p1b1[1] + ball1.b];
@@ -120,17 +136,17 @@ class BallPainter extends CustomPainter {
     List<double> p1_p2 = [p1a[0] - p2a[0], p1a[1] - p2a[1]];
 
     double totalRadius = (radius1 + radius2);
-    double d2 =
-        min(v * handleLenRate, getLength(p1_p2[0], p1_p2[1]) / totalRadius);
+    double d2 = min(v * handleLenRate,
+        DistanceUtil.getLength(p1_p2[0], p1_p2[1]) / totalRadius);
     d2 *= min(1, distanceForTwoCircle * 2 / (radius1 + radius2));
 
     radius1 *= d2;
     radius2 *= d2;
 
-    List<double> sp1 = getVector(angle1a - pi_2, radius1);
-    List<double> sp2 = getVector(angle2a + pi_2, radius2);
-    List<double> sp3 = getVector(angle2b - pi_2, radius2);
-    List<double> sp4 = getVector(angle1b + pi_2, radius1);
+    List<double> sp1 = DistanceUtil.getVector(angle1a - pi_2, radius1);
+    List<double> sp2 = DistanceUtil.getVector(angle2a + pi_2, radius2);
+    List<double> sp3 = DistanceUtil.getVector(angle2b - pi_2, radius2);
+    List<double> sp4 = DistanceUtil.getVector(angle1b + pi_2, radius1);
 
     Path path1 = new Path();
     path1.moveTo(p1a[0], p1a[1]);
@@ -143,25 +159,6 @@ class BallPainter extends CustomPainter {
     path1.close();
 
     canvas.drawPath(path1, paint);
-  }
-
-  static double getDistance(
-      final double x1, final double y1, final double x2, final double y2) {
-    double x = x1 - x2;
-    double y = y1 - y2;
-    double d = x * x + y * y;
-    return sqrt(d).abs();
-  }
-
-  static double getLength(double x, double y) {
-    return getDistance(x, y, 0.0, 0.0);
-  }
-
-  static List<double> getVector(double radians, double length) {
-    var result = new List<double>();
-    result.add((cos(radians) * length));
-    result.add((sin(radians) * length));
-    return result;
   }
 
   bool shouldRepaint(BallPainter other) => other.update != update;

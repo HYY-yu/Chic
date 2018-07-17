@@ -3,8 +3,10 @@ import 'dart:ui' as ui;
 import 'package:chic/bean/budget.dart';
 import 'package:chic/bean/currency.dart';
 import 'package:chic/util/display.dart';
+import 'package:chic/util/distance.dart';
 import 'package:chic/widget/ball_painter.dart';
-import 'package:chic/widget/budgetlist.dart';
+import 'package:chic/widget/budget_list.dart';
+import 'package:chic/widget/income_consume_view.dart';
 import 'package:chic/widget/radius_btn.dart';
 import 'package:chic/widget/smallball.dart';
 import 'package:flutter/material.dart';
@@ -162,11 +164,15 @@ class _HomePageState extends State<HomePage>
       children: <Widget>[
         GestureDetector(
           onPanStart: (DragStartDetails details) {
-            RenderBox referenceBox = context.findRenderObject();
-            Offset localPosition =
-                referenceBox.globalToLocal(details.globalPosition);
-            startPoint = localPosition;
-            isEnd = false;
+            setState(() {
+              RenderBox referenceBox = context.findRenderObject();
+              Offset localPosition =
+                  referenceBox.globalToLocal(details.globalPosition);
+              startPoint = localPosition;
+
+//            print("now is start point ${startPoint.toString()}");
+              isEnd = false;
+            });
           },
           onPanUpdate: (DragUpdateDetails details) {
             setState(() {
@@ -174,14 +180,66 @@ class _HomePageState extends State<HomePage>
               Offset localPosition =
                   referenceBox.globalToLocal(details.globalPosition);
               updatePoint = localPosition;
+
+//            print("now is update point ${updatePoint.toString()}");
               isEnd = false;
             });
           },
           onPanEnd: (DragEndDetails details) {
-            // 通知本次触摸完结
-            isEnd = true;
-            updatePoint = null;
-            startPoint = null;
+            setState(() {
+//            print("now is end");
+
+              isEnd = true;
+
+              if (CircleBuffer.ballBuffer != null) {
+                var insideBallDistance = DistanceUtil.getDistance(
+                    CircleBuffer.ballBuffer.a,
+                    CircleBuffer.ballBuffer.b,
+                    startPoint.dx,
+                    startPoint.dy);
+
+                var outsideBallDistance = DistanceUtil.getDistance(
+                    CircleBuffer.ballBuffer.a,
+                    CircleBuffer.ballBuffer.b,
+                    updatePoint.dx,
+                    updatePoint.dy);
+
+                if (insideBallDistance <= CircleBuffer.ballBuffer.r) {
+                  // 在圆内部
+                  if (outsideBallDistance >= CircleBuffer.ballBuffer.r * 1.5) {
+                    print(" navigat to pay");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => IncomeOrConsumeView(
+                              isIncome: false,
+                              currencyName: currencyName,
+                              currentBudget: currentBudget,
+                            ),
+                      ),
+                    );
+                  }
+                } else {
+                  // 在圆外部
+                  if (outsideBallDistance < CircleBuffer.ballBuffer.r) {
+                    print(" navigat to income");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => IncomeOrConsumeView(
+                              isIncome: true,
+                              currencyName: currencyName,
+                              currentBudget: currentBudget,
+                            ),
+                      ),
+                    );
+                  }
+                }
+              }
+
+              updatePoint = null;
+              startPoint = null;
+            });
           },
           child: Container(
             color: Colors.blue,
